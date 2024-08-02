@@ -1,5 +1,3 @@
-// app/[slug]/page.js
-
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
@@ -73,7 +71,12 @@ export default function PostPage() {
     incrementViews();
   }, [slug]);
 
-  if (!post) return <div>Loading...</div>;
+  if (!post)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
 
   return (
     <div className="max-w-screen-md mx-auto p-4 mt-16">

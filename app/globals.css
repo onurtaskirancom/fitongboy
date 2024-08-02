@@ -11,3 +11,8 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Spinner için stil */
+.spinner-border {
+  @apply border-t-transparent border-r-gray-700 border-b-gray-700 border-l-gray-700 dark:border-r-gray-300 dark:border-b-gray-300 dark:border-l-gray-300;
+}

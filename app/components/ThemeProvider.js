@@ -41,7 +41,7 @@ const ThemeProvider = ({ children }) => {
   };
 
   if (!theme) {
-    return null; // Tema yüklenene kadar hiçbir şey render etmiyoruz
+    return null; 
   }
 
   return (

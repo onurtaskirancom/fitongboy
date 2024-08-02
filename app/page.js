@@ -1,14 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import BlogList from './components/BlogList';
 import Sidebar from './components/Sidebar';
 
 export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page');
+  const currentPage = page ? parseInt(page, 10) : 1;
+
   const [posts, setPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
   const [recentPosts, setRecentPosts] = useState([]);
+  const [postsPerPage] = useState(5);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -18,13 +25,13 @@ export default function Home() {
         return;
       }
       const data = await res.json();
-      setPosts(data.sort((a, b) => new Date(b.date) - new Date(a.date))); // Son yazıları sıralamak için
+      setPosts(data.sort((a, b) => new Date(b.date) - new Date(a.date)));
       setPopularPosts(
         data
           .slice()
           .sort((a, b) => b.views - a.views)
           .slice(0, 5)
-      ); // En çok okunanları sıralamak için
+      );
       setRecentPosts(
         data
           .slice()
@@ -47,10 +54,34 @@ export default function Home() {
     fetchCategories();
   }, []);
 
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(posts.length / postsPerPage);
+
+  const paginate = (pageNumber) => {
+    router.push(`/?page=${pageNumber}`);
+  };
+
   return (
     <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row pt-16">
       <main className="w-full md:w-3/4 p-4">
-        <BlogList posts={posts} />
+        <BlogList posts={currentPosts} />
+        <div className="pagination mt-4 flex justify-center">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => paginate(index + 1)}
+              className={`px-4 py-2 mx-1 rounded ${
+                currentPage === index + 1
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-gray-300 text-black'
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </main>
       <aside className="w-full md:w-1/4 p-4">
         <Sidebar
