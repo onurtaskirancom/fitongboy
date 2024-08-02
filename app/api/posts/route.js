@@ -2,7 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
-export async function GET() {
+export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  const category = searchParams.get('category')?.toLowerCase();
+
   try {
     const blogDirectory = path.join(process.cwd(), 'app', 'posts');
     if (!fs.existsSync(blogDirectory)) {
@@ -27,7 +30,15 @@ export async function GET() {
         };
       });
 
-    return new Response(JSON.stringify(posts), {
+    const filteredPosts = category
+      ? posts.filter(
+          (post) =>
+            post.categories &&
+            post.categories.map((c) => c.toLowerCase()).includes(category)
+        )
+      : posts;
+
+    return new Response(JSON.stringify(filteredPosts), {
       headers: {
         'Content-Type': 'application/json',
       },

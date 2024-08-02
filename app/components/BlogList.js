@@ -22,7 +22,7 @@ const BlogList = ({ posts }) => {
             </div>
           </div>
           <div className="p-4">
-            <p className="text-white">{post.excerpt}</p>
+            <p className="text-black dark:text-white">{post.excerpt}</p>
           </div>
         </Link>
       ))}
