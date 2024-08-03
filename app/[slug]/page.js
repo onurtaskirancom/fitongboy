@@ -74,7 +74,7 @@ export default function PostPage() {
   if (!post)
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-400"></div>
       </div>
     );
 
@@ -89,7 +89,7 @@ export default function PostPage() {
         className="w-full h-auto mb-4 mx-auto rounded-lg"
       />
       <p className="text-gray-500 text-center">{post.frontmatter.date}</p>
-      <div className="prose mx-auto">
+      <div className="prose mx-auto text-black dark:text-zinc-200">
         <MDXRemote {...post.mdxSource} />
       </div>
       <div className="mt-8">

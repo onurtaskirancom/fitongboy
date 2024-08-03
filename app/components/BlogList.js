@@ -9,20 +9,20 @@ const BlogList = ({ posts }) => {
         <Link
           key={post.slug}
           href={`/${post.slug}`}
-          className="block border rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-200"
+          className="block rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-200"
         >
-          <div className="relative">
+          <div className="relative overflow-hidden">
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-48 object-cover"
+              className="w-full h-48 object-cover transition-transform duration-300 transform hover:scale-105"
             />
-            <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white p-4">
+            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
               <h2 className="text-xl font-bold">{post.title}</h2>
             </div>
           </div>
-          <div className="p-4">
-            <p className="text-black dark:text-white">{post.excerpt}</p>
+          <div className="p-4 bg-white dark:bg-zinc-900">
+            <p className="text-black dark:text-slate-300">{post.excerpt}</p>
           </div>
         </Link>
       ))}
