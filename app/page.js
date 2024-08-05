@@ -5,7 +5,20 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import BlogList from './components/BlogList';
 import Sidebar from './components/Sidebar';
 import FeaturedPosts from './components/FeaturedPosts';
-import Navbar from './components/Navbar'; // Navbar bileşenini ekliyoruz
+import TrendPosts from './components/TrendPosts';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+
+const filterPostsByCategory = (posts, category) => {
+  return posts.filter((post) => post.categories.includes(category));
+};
+
+const getTopPostsByViews = (posts, count) => {
+  return posts
+    .slice()
+    .sort((a, b) => b.views - a.views)
+    .slice(0, count);
+};
 
 export default function Home() {
   const router = useRouter();
@@ -65,11 +78,32 @@ export default function Home() {
     router.push(`/?page=${pageNumber}`);
   };
 
+  const antrenmanPosts = getTopPostsByViews(
+    filterPostsByCategory(posts, 'Antrenman'),
+    6
+  );
+  const beslenmePosts = getTopPostsByViews(
+    filterPostsByCategory(posts, 'Beslenme'),
+    6
+  );
+
   return (
     <div>
       <Navbar />
       <div className="max-w-screen-xl mx-auto flex flex-col pt-16">
-        {currentPage === 1 && <FeaturedPosts posts={posts} />}
+        {currentPage === 1 && (
+          <>
+            <FeaturedPosts posts={posts} />
+            <TrendPosts
+              title="Antrenmanlarda Trend Olanlar"
+              posts={antrenmanPosts}
+            />
+            <TrendPosts
+              title="Beslenmede Trend Olanlar"
+              posts={beslenmePosts}
+            />
+          </>
+        )}
         <div className="flex flex-col md:flex-row">
           <main className="w-full md:w-3/4 p-4">
             <BlogList posts={currentPosts.slice(currentPage === 1 ? 3 : 0)} />
@@ -98,6 +132,7 @@ export default function Home() {
           </aside>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

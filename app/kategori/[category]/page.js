@@ -4,10 +4,19 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import BlogList from '../../components/BlogList';
 
+const formatCategoryName = (category) => {
+  return category.replace(/\s+/g, '-').toLowerCase();
+};
+
+const decodeCategoryName = (category) => {
+  return decodeURIComponent(category.replace(/-/g, ' '));
+};
+
 export default function CategoryPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { category } = useParams();
+  const formattedCategory = decodeCategoryName(category);
   const page = searchParams.get('page');
   const currentPage = page ? parseInt(page, 10) : 1;
 
@@ -17,9 +26,7 @@ export default function CategoryPage() {
   useEffect(() => {
     async function fetchCategoryPosts() {
       try {
-        const res = await fetch(
-          `/api/posts?category=${category.toLowerCase()}`
-        );
+        const res = await fetch(`/api/posts?category=${formattedCategory}`);
         if (!res.ok) {
           throw new Error('Failed to fetch posts');
         }
@@ -39,13 +46,14 @@ export default function CategoryPage() {
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
   const paginate = (pageNumber) => {
-    router.push(`/kategori/${category.toLowerCase()}?page=${pageNumber}`);
+    router.push(`/kategori/${formatCategoryName(category)}?page=${pageNumber}`);
   };
 
   return (
     <div className="max-w-screen-xl mx-auto p-4 mt-16">
       <h1 className="text-3xl font-bold text-center mb-8">
-        {category.charAt(0).toUpperCase() + category.slice(1)} Yazıları
+        {formattedCategory.charAt(0).toUpperCase() + formattedCategory.slice(1)}{' '}
+        Yazıları
       </h1>
       <BlogList posts={currentPosts} />
       <div className="pagination mt-4 flex justify-center">

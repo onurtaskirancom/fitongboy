@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-const Sidebar = ({ categories, popularPosts, recentPosts }) => {
+const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
   return (
     <div>
       <section className="mb-4">
@@ -70,10 +70,12 @@ const Sidebar = ({ categories, popularPosts, recentPosts }) => {
             categories.map((category, index) => (
               <li key={index} className="float-right mr-2">
                 <Link
-                  href={`/kategori/${category.toLowerCase()}`}
-                  className="block text-center text-blue-300 hover:bg-gradient-to-r hover:from-gray-800 hover:to-blue-500 hover:scale-105 transition-all duration-300 py-1  rounded"
+                  href={`/kategori/${category
+                    .toLowerCase()
+                    .replace(/\s+/g, '-')}`}
+                  className="block text-center text-gray-800 dark:text-blue-300 hover:bg-gradient-to-r hover:from-gray-200 hover:to-blue-300 dark:hover:from-gray-800 dark:hover:to-blue-500 hover:scale-105 transition-all duration-300 py-1 rounded"
                 >
-                 {category}
+                  {category}
                 </Link>
               </li>
             ))
