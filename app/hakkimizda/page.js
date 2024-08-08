@@ -1,8 +1,18 @@
 'use client';
 
+import Image from 'next/image';
+
 export default function About() {
   return (
-    <div className="max-w-screen-lg mx-auto p-4 mt-16 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div className="max-w-screen-lg mx-auto p-4 mt-16 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white">
+      <div className="flex justify-center mb-8">
+        <Image
+          src="/images/fitongboy-logo.svg"
+          alt="Fitongboy Logo"
+          width={350}
+          height={350}
+        />
+      </div>
       <h1 className="text-3xl font-bold text-center mb-8">Hakkımızda</h1>
       <div className="space-y-4">
         <p>

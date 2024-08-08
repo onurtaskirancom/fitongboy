@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useTheme } from './ThemeProvider';
 import { FaSun, FaMoon } from 'react-icons/fa';
 
@@ -14,15 +15,20 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 shadow-md z-50">
+    <nav className="fixed top-0 left-0 right-0 bg-white dark:bg-zinc-900 shadow-md z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0">
-            <Link
-              href="/"
-              className="text-2xl font-bold text-gray-800 dark:text-white"
-            >
-              Logo
+          <div className="flex-shrink-0 flex items-center">
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/images/fitongboy-logo.svg"
+                alt="Fitongboy Logo"
+                width={95}
+                height={95}
+              />
+              <span className="ml-2 text-3xl font-bold text-gray-800 dark:text-white">
+                Fitongboy
+              </span>
             </Link>
           </div>
           <div className="hidden md:block">

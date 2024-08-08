@@ -47,7 +47,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="max-w-screen-md mx-auto p-4 mt-16 bg-white dark:bg-gray-900">
+    <div className="max-w-screen-md mx-auto p-4 mt-16 bg-white dark:bg-zinc-900">
       <h1 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
         İletişim
       </h1>
