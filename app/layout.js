@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <Navbar />
           <div className="pt-16">
-            <div className="max-w-screen-xl mx-auto">{children}</div>
+            <div className="mx-auto">{children}</div>
           </div>
         </ThemeProvider>
       </body>

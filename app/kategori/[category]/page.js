@@ -3,13 +3,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import BlogList from '../../components/BlogList';
+import replaceTurkishChars from '../../utils/turkishChars';
+import Footer from '@/app/components/Footer';
 
 const formatCategoryName = (category) => {
-  return category.replace(/\s+/g, '-').toLowerCase();
+  return replaceTurkishChars(category).toLowerCase().replace(/\s+/g, '-');
 };
 
 const decodeCategoryName = (category) => {
-  return decodeURIComponent(category.replace(/-/g, ' '));
+  return replaceTurkishChars(category.replace(/-/g, ' '));
 };
 
 export default function CategoryPage() {
@@ -27,13 +29,16 @@ export default function CategoryPage() {
     async function fetchCategoryPosts() {
       try {
         const res = await fetch(`/api/posts?category=${formattedCategory}`);
+        console.log('API Response:', res);
         if (!res.ok) {
           throw new Error('Failed to fetch posts');
         }
         const data = await res.json();
-        setPosts(data);
+        console.log('Fetched Data:', data);
+        setPosts(data || []); // Default to an empty array if undefined
       } catch (error) {
         console.error('Error fetching posts:', error);
+        setPosts([]); // Default to an empty array on error
       }
     }
 
@@ -46,31 +51,35 @@ export default function CategoryPage() {
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
   const paginate = (pageNumber) => {
-    router.push(`/kategori/${formatCategoryName(category)}?page=${pageNumber}`);
+    router.push(`/kategori/${category}?page=${pageNumber}`);
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto p-4 mt-16">
-      <h1 className="text-3xl font-bold text-center mb-8">
-        {formattedCategory.charAt(0).toUpperCase() + formattedCategory.slice(1)}{' '}
-        Yazıları
-      </h1>
-      <BlogList posts={currentPosts} />
-      <div className="pagination mt-4 flex justify-center">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => paginate(index + 1)}
-            className={`px-4 py-2 mx-1 rounded ${
-              currentPage === index + 1
-                ? 'bg-gray-900 text-white'
-                : 'bg-gray-300 text-black'
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
+    <>
+      <div className="max-w-screen-xl mx-auto p-4 mt-16">
+        <h1 className="text-3xl font-bold text-center mb-8">
+          {formattedCategory.charAt(0).toUpperCase() +
+            formattedCategory.slice(1)}{' '}
+          Yazıları
+        </h1>
+        <BlogList posts={currentPosts} />
+        <div className="pagination mt-4 flex justify-center">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => paginate(index + 1)}
+              className={`px-4 py-2 mx-1 rounded ${
+                currentPage === index + 1
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-gray-300 text-black'
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

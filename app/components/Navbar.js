@@ -63,6 +63,12 @@ const Navbar = () => {
               >
                 Beslenme
               </Link>
+              <Link
+                href="/kocluk-al"
+                className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Koçluk Al
+              </Link>
               <button
                 onClick={toggleTheme}
                 className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium flex items-center"

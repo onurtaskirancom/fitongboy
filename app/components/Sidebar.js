@@ -2,6 +2,29 @@
 
 import Link from 'next/link';
 
+const replaceTurkishCharacters = (str) => {
+  const turkishMap = {
+    ş: 's',
+    Ş: 'S',
+    ı: 'i',
+    İ: 'I',
+    ç: 'c',
+    Ç: 'C',
+    ü: 'u',
+    Ü: 'U',
+    ö: 'o',
+    Ö: 'O',
+    ğ: 'g',
+    Ğ: 'G',
+  };
+  return str
+    .split('')
+    .map((char) => turkishMap[char] || char)
+    .join('')
+    .toLowerCase()
+    .replace(/\s+/g, '-');
+};
+
 const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
   return (
     <div>
@@ -70,9 +93,7 @@ const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
             categories.map((category, index) => (
               <li key={index} className="float-right mr-2">
                 <Link
-                  href={`/kategori/${category
-                    .toLowerCase()
-                    .replace(/\s+/g, '-')}`}
+                  href={`/kategori/${replaceTurkishCharacters(category)}`}
                   className="block text-center text-gray-800 dark:text-blue-300 hover:bg-gradient-to-r hover:from-gray-200 hover:to-blue-300 dark:hover:from-gray-800 dark:hover:to-blue-500 hover:scale-105 transition-all duration-300 py-1 rounded"
                 >
                   {category}

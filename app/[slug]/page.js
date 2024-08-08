@@ -3,6 +3,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import Footer from '../components/Footer';
+import replaceTurkishChars from '../utils/turkishChars';
 
 const MDXRemote = dynamic(() =>
   import('next-mdx-remote').then((mod) => mod.MDXRemote)
@@ -11,6 +14,7 @@ const MDXRemote = dynamic(() =>
 export default function PostPage() {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
+  const [similarPosts, setSimilarPosts] = useState([]);
   const hasIncrementedViews = useRef(false);
   const firstRender = useRef(true);
 
@@ -71,6 +75,38 @@ export default function PostPage() {
     incrementViews();
   }, [slug]);
 
+  useEffect(() => {
+    async function fetchSimilarPosts() {
+      if (
+        !post ||
+        !post.frontmatter.categories ||
+        post.frontmatter.categories.length === 0
+      ) {
+        return;
+      }
+
+      const category = replaceTurkishChars(
+        post.frontmatter.categories[0]
+      ).toLowerCase();
+      try {
+        const res = await fetch(
+          `/api/similar-posts?category=${category}&slug=${slug}`
+        );
+        if (!res.ok) {
+          throw new Error('Failed to fetch similar posts');
+        }
+        const data = await res.json();
+        setSimilarPosts(data || []);
+      } catch (error) {
+        console.error('Error fetching similar posts:', error);
+      }
+    }
+
+    if (post) {
+      fetchSimilarPosts();
+    }
+  }, [post, slug]);
+
   if (!post)
     return (
       <div className="flex justify-center items-center h-screen">
@@ -79,32 +115,69 @@ export default function PostPage() {
     );
 
   return (
-    <div className="max-w-screen-md mx-auto p-4 mt-16">
-      <h1 className="text-3xl font-bold text-center">
-        {post.frontmatter.title}
-      </h1>
-      <img
-        src={post.frontmatter.image}
-        alt={post.frontmatter.title}
-        className="w-full h-auto mb-4 mx-auto rounded-lg"
-      />
-      <p className="text-gray-500 text-center">{post.frontmatter.date}</p>
-      <div className="prose mx-auto text-black dark:text-zinc-200">
-        <MDXRemote {...post.mdxSource} />
-      </div>
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold">Kategoriler</h2>
-        <div className="flex flex-wrap gap-2 mt-2">
-          {post.frontmatter.categories.map((category) => (
-            <span
-              key={category}
-              className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm"
-            >
-              {category}
-            </span>
-          ))}
+    <>
+      <div className="max-w-screen-md mx-auto p-4 mt-16">
+        <h1 className="text-3xl font-bold text-center">
+          {post.frontmatter.title}
+        </h1>
+        <img
+          src={post.frontmatter.image}
+          alt={post.frontmatter.title}
+          className="w-full h-auto mb-4 mx-auto rounded-lg"
+        />
+        <p className="text-gray-500 text-center">{post.frontmatter.date}</p>
+        <div className="prose mx-auto text-black dark:text-zinc-200">
+          <MDXRemote {...post.mdxSource} />
         </div>
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold">Kategoriler</h2>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {post.frontmatter.categories.map((category) => (
+              <Link
+                key={category}
+                href={`/kategori/${replaceTurkishChars(
+                  category
+                ).toLowerCase()}`}
+              >
+                <span className="cursor-pointer bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-300">
+                  {category}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+        {similarPosts.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold">Benzer Yazılar</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              {similarPosts.map((similarPost) => (
+                <Link key={similarPost.slug} href={`/${similarPost.slug}`}>
+                  <div className="block rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-200">
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={similarPost.image}
+                        alt={similarPost.title}
+                        className="w-full h-48 object-cover transition-transform duration-300 transform hover:scale-105"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                        <h2 className="text-xl font-bold">
+                          {similarPost.title}
+                        </h2>
+                      </div>
+                    </div>
+                    <div className="p-4 bg-white dark:bg-zinc-900">
+                      <p className="text-black dark:text-slate-300">
+                        {similarPost.excerpt}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

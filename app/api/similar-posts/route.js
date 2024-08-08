@@ -6,6 +6,7 @@ import replaceTurkishChars from '../../utils/turkishChars';
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const category = searchParams.get('category')?.toLowerCase();
+  const slug = searchParams.get('slug');
 
   try {
     const blogDirectory = path.join(process.cwd(), 'app', 'posts');
@@ -19,7 +20,10 @@ export async function GET(req) {
     }
 
     const posts = files
-      .filter((filename) => filename.endsWith('.mdx'))
+      .filter(
+        (filename) =>
+          filename.endsWith('.mdx') && filename.replace('.mdx', '') !== slug
+      )
       .map((filename) => {
         const filePath = path.join(blogDirectory, filename);
         const markdownWithMeta = fs.readFileSync(filePath, 'utf-8');
@@ -32,14 +36,16 @@ export async function GET(req) {
       });
 
     const filteredPosts = category
-      ? posts.filter(
-          (post) =>
-            post.categories &&
-            post.categories
-              .map((c) => replaceTurkishChars(c.toLowerCase()))
-              .includes(category)
-        )
-      : posts;
+      ? posts
+          .filter(
+            (post) =>
+              post.categories &&
+              post.categories
+                .map((c) => replaceTurkishChars(c.toLowerCase()))
+                .includes(category)
+          )
+          .slice(0, 4)
+      : [];
 
     return new Response(JSON.stringify(filteredPosts), {
       headers: {

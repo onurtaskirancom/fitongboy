@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import BlogList from '../components/BlogList';
+import Footer from '../components/Footer';
 
 export default function BeslenmePage() {
   const router = useRouter();
@@ -40,24 +41,29 @@ export default function BeslenmePage() {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto p-4 mt-16">
-      <h1 className="text-3xl font-bold text-center mb-8">Beslenme Yazıları</h1>
-      <BlogList posts={currentPosts} />
-      <div className="pagination mt-4 flex justify-center">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => paginate(index + 1)}
-            className={`px-4 py-2 mx-1 rounded ${
-              currentPage === index + 1
-                ? 'bg-gray-900 text-white'
-                : 'bg-gray-300 text-black'
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
+    <>
+      <div className="max-w-screen-xl mx-auto p-4 mt-16">
+        <h1 className="text-3xl font-bold text-center mb-8">
+          Beslenme Yazıları
+        </h1>
+        <BlogList posts={currentPosts} />
+        <div className="pagination mt-4 flex justify-center">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => paginate(index + 1)}
+              className={`px-4 py-2 mx-1 rounded ${
+                currentPage === index + 1
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-gray-300 text-black'
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
