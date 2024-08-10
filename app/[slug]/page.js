@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Footer from '../components/Footer';
 import replaceTurkishChars from '../utils/turkishChars';
+import { MdOutlineDateRange } from 'react-icons/md';
 
 const MDXRemote = dynamic(() =>
   import('next-mdx-remote').then((mod) => mod.MDXRemote)
@@ -117,16 +118,24 @@ export default function PostPage() {
   return (
     <>
       <div className="max-w-screen-md mx-auto p-4 mt-16">
-        <h1 className="text-3xl font-bold text-center">
-          {post.frontmatter.title}
-        </h1>
         <img
           src={post.frontmatter.image}
           alt={post.frontmatter.title}
           className="w-full h-auto mb-4 mx-auto rounded-lg"
         />
-        <p className="text-gray-500 text-center">{post.frontmatter.date}</p>
-        <div className="prose mx-auto text-black dark:text-zinc-200">
+        <h1 className="text-3xl font-bold text-center">
+          {post.frontmatter.title}
+        </h1>
+        <div className="relative text-gray-500 text-center flex items-center justify-center mt-4">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-600"></div>
+          </div>
+          <span className="relative bg-slate-200 dark:bg-gray-900 px-4 flex items-center">
+            <MdOutlineDateRange className="mr-2" />
+            {post.frontmatter.date}
+          </span>
+        </div>
+        <div className="prose mx-auto text-black dark:text-zinc-200 mt-4">
           <MDXRemote {...post.mdxSource} />
         </div>
         <div className="mt-8">
