@@ -11,6 +11,7 @@ export default function About() {
           <Image
             src="/images/fitongboy-logo.svg"
             alt="Fitongboy Logo"
+            className='w-3/5'
             width={350}
             height={350}
           />

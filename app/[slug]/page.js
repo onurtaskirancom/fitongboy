@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Footer from '../components/Footer';
 import replaceTurkishChars from '../utils/turkishChars';
 import { MdOutlineDateRange } from 'react-icons/md';
+import Image from 'next/image';
 
 const MDXRemote = dynamic(() =>
   import('next-mdx-remote').then((mod) => mod.MDXRemote)
@@ -39,7 +40,7 @@ export default function PostPage() {
     }
 
     fetchPost();
-
+    window.scrollTo(0, 0);
     return () => {
       isMounted = false;
     };
@@ -66,7 +67,6 @@ export default function PostPage() {
           console.error('Failed to increment views:', errorResponse);
           throw new Error('Failed to increment views');
         }
-        const data = await res.json();
         hasIncrementedViews.current = true;
       } catch (error) {
         console.error('Error in incrementViews:', error);
@@ -117,11 +117,14 @@ export default function PostPage() {
 
   return (
     <>
-      <div className="max-w-screen-md mx-auto p-4 mt-16">
-        <img
+      <div className="max-w-custom mx-auto p-4 mt-16">
+        <Image
           src={post.frontmatter.image}
           alt={post.frontmatter.title}
           className="w-full h-auto mb-4 mx-auto rounded-lg"
+          width={800}
+          height={450}
+          priority
         />
         <h1 className="text-3xl font-bold text-center">
           {post.frontmatter.title}
@@ -163,10 +166,13 @@ export default function PostPage() {
                 <Link key={similarPost.slug} href={`/${similarPost.slug}`}>
                   <div className="block rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-200">
                     <div className="relative overflow-hidden">
-                      <img
+                      <Image
                         src={similarPost.image}
                         alt={similarPost.title}
                         className="w-full h-48 object-cover transition-transform duration-300 transform hover:scale-105"
+                        width={400}
+                        height={300}
+                        priority
                       />
                       <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
                         <h2 className="text-xl font-bold">

@@ -10,6 +10,20 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .max-w-custom {
+    max-width: calc((100% - 768px) / 2 + 768px); /* 768px is the 'md' breakpoint */
+    max-width: calc((1024px - 768px) / 2 + 768px); /* Custom size between 'md' and 'lg' */
+  }
+   .mr-1-25 {
+    margin-right: 1.25rem;
+  }
+}
+
+@layer base {
+    img {
+        width: auto;
+        height: auto;
+    }
 }
 
 /* Spinner için stil */

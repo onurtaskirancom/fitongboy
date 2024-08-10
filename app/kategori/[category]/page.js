@@ -29,12 +29,10 @@ export default function CategoryPage() {
     async function fetchCategoryPosts() {
       try {
         const res = await fetch(`/api/posts?category=${formattedCategory}`);
-        console.log('API Response:', res);
         if (!res.ok) {
           throw new Error('Failed to fetch posts');
         }
         const data = await res.json();
-        console.log('Fetched Data:', data);
         setPosts(data || []); // Default to an empty array if undefined
       } catch (error) {
         console.error('Error fetching posts:', error);

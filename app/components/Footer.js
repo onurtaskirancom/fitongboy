@@ -17,9 +17,9 @@ const Footer = () => {
               <Image
                 src="/images/fitongboy-logo.svg"
                 alt="Fitongboy Logo"
+                className="h-24 w-24"
                 width={90}
                 height={90}
-                priority
               />
             </Link>
           </div>
