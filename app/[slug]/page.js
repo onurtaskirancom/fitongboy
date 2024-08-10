@@ -24,7 +24,7 @@ export default function PostPage() {
     let isMounted = true;
 
     async function fetchPost() {
-      if (!slug) return;
+      if (!slug || slug === 'rss.xml') return; // rss.xml gibi dosyaları filtrele
       try {
         const res = await fetch(`/api/mdx?slug=${slug}`);
         if (!res.ok) {
@@ -47,7 +47,12 @@ export default function PostPage() {
   }, [slug]);
 
   useEffect(() => {
-    if (!slug || hasIncrementedViews.current || !firstRender.current) {
+    if (
+      !slug ||
+      slug === 'rss.xml' ||
+      hasIncrementedViews.current ||
+      !firstRender.current
+    ) {
       return;
     }
 

@@ -2,13 +2,14 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
-export async function POST(req, res) {
+export async function POST(req) {
   try {
     const body = await req.json();
     const { slug } = body;
 
-    if (!slug) {
-      return new Response(JSON.stringify({ error: 'Slug is required' }), {
+    if (!slug || slug === 'rss.xml') {
+      // rss.xml gibi dosyaları filtrele
+      return new Response(JSON.stringify({ error: 'Invalid slug' }), {
         status: 400,
         headers: {
           'Content-Type': 'application/json',
@@ -19,12 +20,15 @@ export async function POST(req, res) {
     const filePath = path.join(process.cwd(), 'app', 'posts', `${slug}.mdx`);
 
     if (!fs.existsSync(filePath)) {
-      return new Response(JSON.stringify({ error: 'File not found' }), {
-        status: 404,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      return new Response(
+        JSON.stringify({ error: `File not found: ${filePath}` }),
+        {
+          status: 404,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
     }
 
     const source = fs.readFileSync(filePath, 'utf-8');
