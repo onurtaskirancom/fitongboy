@@ -1,7 +1,37 @@
-'use client';
-
 import Image from 'next/image';
 import Footer from '../components/Footer';
+
+export const generateMetadata = () => {
+  const siteUrl = process.env.SITE_URL || 'http://localhost:3000';
+  const canonicalUrl = `${siteUrl}/hakkimizda`;
+
+  return {
+    title: 'Fitongboy | Hakkımızda',
+    description: 'Fitongboy hakkında bilgi edinin.',
+    openGraph: {
+      title: 'Fitongboy | Hakkımızda',
+      description: 'Fitongboy hakkında bilgi edinin.',
+      url: canonicalUrl,
+      type: 'website',
+      images: [
+        {
+          url: `${siteUrl}/images/fitongboy-logo.png`,
+          width: 800,
+          height: 600,
+          alt: 'Fitongboy Logo',
+        },
+      ],
+      site_name: 'Fitongboy',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@Fitongboy',
+      title: 'Fitongboy | Hakkımızda',
+      description: 'Fitongboy hakkında bilgi edinin.',
+      images: `${siteUrl}/images/fitongboy-logo.png`,
+    },
+  };
+};
 
 export default function About() {
   return (
@@ -11,9 +41,10 @@ export default function About() {
           <Image
             src="/images/fitongboy-logo.svg"
             alt="Fitongboy Logo"
-            className='w-3/5'
+            className="w-3/5"
             width={350}
             height={350}
+            priority
           />
         </div>
         <h1 className="text-3xl font-bold text-center mb-8">Hakkımızda</h1>
@@ -33,7 +64,7 @@ export default function About() {
           <p>
             Ayrıca, kişiye özel antrenman programları ve danışmanlık hizmetleri
             de sunuyoruz. İhtiyaçlarınıza ve hedeflerinize uygun bir program
-            oluşturmak için abizimle iletişime geçebilirsiniz.
+            oluşturmak için bizimle iletişime geçebilirsiniz.
           </p>
           <p>
             Sağlıklı yaşam yolculuğunuzda <strong>Fitongboy</strong> olarak

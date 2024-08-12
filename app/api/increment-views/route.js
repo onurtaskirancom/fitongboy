@@ -8,7 +8,7 @@ export async function POST(req) {
     const { slug } = body;
 
     if (!slug || slug === 'rss.xml') {
-      // rss.xml gibi dosyaları filtrele
+      //Filter files like rss.xml
       return new Response(JSON.stringify({ error: 'Invalid slug' }), {
         status: 400,
         headers: {

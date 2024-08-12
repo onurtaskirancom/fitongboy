@@ -40,6 +40,7 @@ const Navbar = () => {
                 alt="Fitongboy Logo"
                 width={95}
                 height={95}
+                priority
                 className="w-24 h-24 sm:w-20 sm:h-20"
               />
               <span className="ml-2 text-3xl font-bold text-gray-800 dark:text-white sm:text-2xl">

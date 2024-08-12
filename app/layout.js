@@ -3,6 +3,7 @@ import './globals.css';
 import Navbar from './components/Navbar';
 import ThemeProvider from './components/ThemeProvider';
 import ScrollToTop from './components/ScrollToTop';
+import CanonicalHead from './components/CanonicalHead';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -14,11 +15,13 @@ export const metadata = {
     title: 'Fitongboy | Fitness ve Vücut Geliştirme Platformu',
     description:
       'Fitongboy, fitness, vücut geliştirme ve güç antrenmanı konularında doğru bilgileri sunar. Hedeflerinize ulaşmanız için buradayız.',
-    url: 'https://www.fit.ongboy.com',
+    url: process.env.SITE_URL || 'http://localhost:3000',
     type: 'website',
     images: [
       {
-        url: 'https://www.fit.ongboy.com/images/fitongboy-logo.png',
+        url: `${
+          process.env.SITE_URL || 'http://localhost:3000'
+        }/images/fitongboy-logo.png`,
         width: 800,
         height: 600,
         alt: 'Fitongboy Logo',
@@ -32,11 +35,11 @@ export const metadata = {
     title: 'Fitongboy | Fitness ve Vücut Geliştirme Platformu',
     description:
       'Fitongboy, fitness, vücut geliştirme ve güç antrenmanı konularında doğru bilgileri sunar. Hedeflerinize ulaşmanız için buradayız.',
-    image: 'https://www.fit.ongboy.com/images/fitongboy-logo.png',
+    image: `${
+      process.env.SITE_URL || 'http://localhost:3000'
+    }/images/fitongboy-logo.png`,
   },
 };
-
-
 
 export default function RootLayout({ children }) {
   return (
@@ -44,6 +47,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.className} min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white`}
       >
+        <CanonicalHead
+          siteUrl={process.env.SITE_URL || 'http://localhost:3000'}
+        />
         <ThemeProvider>
           <Navbar />
           <ScrollToTop />
