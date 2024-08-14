@@ -13,6 +13,7 @@ export async function POST(req) {
     nutrition,
     goals,
     message,
+    phone, 
   } = await req.json();
 
   if (
@@ -26,7 +27,8 @@ export async function POST(req) {
     !currentProgram ||
     !nutrition ||
     !goals ||
-    !message
+    !message ||
+    !phone 
   ) {
     return new Response(
       JSON.stringify({ message: 'Tüm alanlar gereklidir.' }),
@@ -51,7 +53,7 @@ export async function POST(req) {
     from: process.env.GMAIL_USER,
     to: process.env.RECIPIENT_EMAIL,
     subject: `Fitongboy Koçluk Talebi - ${name}`,
-    text: `İsim: ${name}\nE-posta: ${email}\nYaş: ${age}\nCinsiyet: ${gender}\nAntrenman Tecrübesi: ${experience} yıl\nGünlük Antrenman Süresi: ${dailyTrainingDuration} saat\nHaftalık Antrenman Günleri: ${weeklyTrainingDays} gün\nMevcut Program: ${currentProgram}\nBeslenme Bilgileri: ${nutrition}\nHedefler: ${goals}\nMesaj: ${message}`,
+    text: `İsim: ${name}\nE-posta: ${email}\nTelefon: ${phone}\nYaş: ${age}\nCinsiyet: ${gender}\nAntrenman Tecrübesi: ${experience} yıl\nGünlük Antrenman Süresi: ${dailyTrainingDuration} saat\nHaftalık Antrenman Günleri: ${weeklyTrainingDays} gün\nMevcut Program: ${currentProgram}\nBeslenme Bilgileri: ${nutrition}\nHedefler: ${goals}\nMesaj: ${message}`,
   };
 
   try {

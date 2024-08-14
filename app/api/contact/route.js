@@ -1,9 +1,9 @@
 import nodemailer from 'nodemailer';
 
 export async function POST(req) {
-  const { name, email, message } = await req.json();
+  const { name, email, message, phone } = await req.json();
 
-  if (!name || !email || !message) {
+  if (!name || !email || !message || !phone) {
     return new Response(
       JSON.stringify({ message: 'All fields are required.' }),
       {
@@ -27,7 +27,7 @@ export async function POST(req) {
     from: process.env.GMAIL_USER,
     to: process.env.RECIPIENT_EMAIL,
     subject: `Fitongboy Contact Form Submission from ${name}`,
-    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+    text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,
   };
 
   try {

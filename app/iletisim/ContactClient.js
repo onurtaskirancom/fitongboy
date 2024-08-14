@@ -7,6 +7,7 @@ export default function ContactClient() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '', 
     message: '',
   });
 
@@ -43,6 +44,7 @@ export default function ContactClient() {
     setFormData({
       name: '',
       email: '',
+      phone: '', 
       message: '',
     });
   };
@@ -83,6 +85,23 @@ export default function ContactClient() {
               name="email"
               id="email"
               value={formData.email}
+              onChange={handleChange}
+              required
+              className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="phone"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Telefon
+            </label>
+            <input
+              type="tel"
+              name="phone"
+              id="phone"
+              value={formData.phone}
               onChange={handleChange}
               required
               className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"

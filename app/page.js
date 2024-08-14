@@ -8,6 +8,7 @@ import FeaturedPosts from './components/FeaturedPosts';
 import TrendPosts from './components/TrendPosts';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import CategoryList from './components/CategoryList';
 
 const filterPostsByCategory = (posts, category) => {
   return posts.filter((post) => post.categories.includes(category));
@@ -87,53 +88,52 @@ export default function Home() {
     6
   );
 
-  return (
-    <div>
-      <Navbar />
-      <div className="max-w-screen-xl mx-auto flex flex-col pt-16">
-        {currentPage === 1 && (
-          <>
-            <FeaturedPosts posts={posts} />
-            <TrendPosts
-              title="Antrenmanlarda Trend Olanlar"
-              posts={antrenmanPosts}
-            />
-            <TrendPosts
-              title="Beslenmede Trend Olanlar"
-              posts={beslenmePosts}
-            />
-          </>
-        )}
-        <div className="flex flex-col md:flex-row">
-          <main className="w-full md:w-3/4 p-4">
-            <BlogList posts={currentPosts.slice(currentPage === 1 ? 3 : 0)} />
-            <div className="pagination mt-4 flex justify-center">
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index + 1}
-                  onClick={() => paginate(index + 1)}
-                  className={`px-4 py-2 mx-1 rounded ${
-                    currentPage === index + 1
-                      ? 'bg-gray-600 text-white'
-                      : 'bg-gray-300 text-black'
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-            </div>
-          </main>
-          <aside className="w-full md:w-1/4 p-4">
-            <Sidebar
-              categories={categories}
-              popularPosts={popularPosts}
-              recentPosts={recentPosts}
-            />
-          </aside>
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
+ return (
+   <div>
+     <Navbar />
+     <div className="max-w-screen-xl mx-auto flex flex-col pt-16">
+       {currentPage === 1 && (
+         <>
+           <FeaturedPosts posts={posts} />
+           <TrendPosts
+             title="Antrenmanlarda Trend Olanlar"
+             posts={antrenmanPosts}
+           />
+           <TrendPosts title="Beslenmede Trend Olanlar" posts={beslenmePosts} />
+         </>
+       )}
+       <div className="flex flex-col md:flex-row">
+         <main className="w-full md:w-3/4 p-4">
+           <BlogList posts={currentPosts.slice(currentPage === 1 ? 3 : 0)} />
+           <div className="pagination mt-4 flex justify-center">
+             {Array.from({ length: totalPages }, (_, index) => (
+               <button
+                 key={index + 1}
+                 onClick={() => paginate(index + 1)}
+                 className={`px-4 py-2 mx-1 rounded ${
+                   currentPage === index + 1
+                     ? 'bg-gray-600 text-white'
+                     : 'bg-gray-300 text-black'
+                 }`}
+               >
+                 {index + 1}
+               </button>
+             ))}
+           </div>
+         </main>
+         <aside className="w-full md:w-1/4 p-4">
+           <Sidebar
+             categories={categories}
+             popularPosts={popularPosts}
+             recentPosts={recentPosts}
+           />
+         </aside>
+       </div>
+     </div>
+     <CategoryList categories={categories} />
+     <Footer />
+   </div>
+ );
+
 }
 

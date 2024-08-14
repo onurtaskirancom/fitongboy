@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaFacebook, FaInstagram, FaLinkedin, FaRss } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaRss, FaYoutube } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 
 const Footer = () => {
@@ -71,8 +71,8 @@ const Footer = () => {
             <Link href="https://www.instagram.com" aria-label="Instagram">
               <FaInstagram className="w-6 h-6 hover:text-pink-600" />
             </Link>
-            <Link href="https://www.linkedin.com" aria-label="LinkedIn">
-              <FaLinkedin className="w-6 h-6 hover:text-blue-700" />
+            <Link href="https://www.youtube.com" aria-label="YouTube">
+              <FaYoutube className="w-6 h-6 hover:text-red-600" />
             </Link>
             <Link href="/rss.xml" aria-label="RSS">
               <FaRss className="w-6 h-6 hover:text-orange-600" />

@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { FaFacebook, FaInstagram, FaRss, FaYoutube } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const replaceTurkishCharacters = (str) => {
   const turkishMap = {
@@ -28,7 +30,29 @@ const replaceTurkishCharacters = (str) => {
 const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
   return (
     <div>
-      <section className="mb-4">
+      <section className="mb-4 pb-4">
+        <h3 className="text-xl font-bold border-l-4 border-blue-500 pl-3">
+          Sosyal Medya
+        </h3>
+        <div className="flex space-x-4 pt-3 ml-4">
+          <Link href="https://www.facebook.com" aria-label="Facebook">
+            <FaFacebook className="w-8 h-8 hover:text-blue-600" />
+          </Link>
+          <Link href="https://www.twitter.com" aria-label="Twitter">
+            <FaXTwitter className="w-8 h-8 hover:text-blue-400" />
+          </Link>
+          <Link href="https://www.instagram.com" aria-label="Instagram">
+            <FaInstagram className="w-8 h-8 hover:text-pink-600" />
+          </Link>
+          <Link href="https://www.youtube.com" aria-label="YouTube">
+            <FaYoutube className="w-8 h-8 hover:text-red-600" />
+          </Link>
+          <Link href="/rss.xml" aria-label="RSS">
+            <FaRss className="w-8 h-8 hover:text-orange-600" />
+          </Link>
+        </div>
+      </section>
+      <section className="mb-4 pb-4">
         <h3 className="text-xl font-bold border-l-4 border-blue-500 pl-3">
           En Çok Okunanlar
         </h3>
@@ -56,7 +80,7 @@ const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
           )}
         </ul>
       </section>
-      <section className="mb-4">
+      <section className="mb-4 pb-4">
         <h3 className="text-xl font-bold border-l-4 border-blue-500 pl-3">
           Son Yazılar
         </h3>
@@ -83,28 +107,6 @@ const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
             <li key="no-recent">Son yazı bulunamadı</li>
           )}
         </ul>
-      </section>
-      <section>
-        <h3 className="text-xl font-bold border-l-4 border-blue-500 pl-3">
-          Kategoriler
-        </h3>
-        <ul className="pt-2">
-          {categories.length > 0 ? (
-            categories.map((category, index) => (
-              <li key={index} className="float-right mr-2">
-                <Link
-                  href={`/kategori/${replaceTurkishCharacters(category)}`}
-                  className="block text-center text-gray-800 dark:text-blue-300 hover:bg-gradient-to-r hover:from-gray-200 hover:to-blue-300 dark:hover:from-gray-800 dark:hover:to-blue-500 hover:scale-105 transition-all duration-300 py-1 rounded"
-                >
-                  {category}
-                </Link>
-              </li>
-            ))
-          ) : (
-            <li key="no-category">Kategori bulunamadı</li>
-          )}
-        </ul>
-        <div className="clear-both"></div>
       </section>
     </div>
   );
