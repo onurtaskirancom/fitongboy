@@ -8,7 +8,7 @@ export async function generateMetadata({ params }) {
     }`
   ).then((res) => res.json());
 
-  if (!post) {
+  if (!post || !post.frontmatter || !post.frontmatter.title) {
     return notFound();
   }
 

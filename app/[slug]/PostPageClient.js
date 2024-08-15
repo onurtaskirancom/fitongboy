@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Footer from '../components/Footer';
 import replaceTurkishChars from '../utils/turkishChars';
@@ -17,6 +18,7 @@ export default function PostPageClient({ slug }) {
   const [similarPosts, setSimilarPosts] = useState([]);
   const hasIncrementedViews = useRef(false);
   const firstRender = useRef(true);
+  const router = useRouter(); // Next.js router
 
   useEffect(() => {
     let isMounted = true;
@@ -30,10 +32,15 @@ export default function PostPageClient({ slug }) {
         }
         const data = await res.json();
         if (isMounted) {
-          setPost(data);
+          if (!data || !data.frontmatter || !data.frontmatter.title) {
+            router.push('/404');
+          } else {
+            setPost(data);
+          }
         }
       } catch (error) {
         console.error('Error fetching post:', error);
+        router.push('/404'); 
       }
     }
 
