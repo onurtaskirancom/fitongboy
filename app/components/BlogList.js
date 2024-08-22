@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 const BlogList = ({ posts }) => {
   return (
@@ -11,11 +12,15 @@ const BlogList = ({ posts }) => {
           href={`/${post.slug}`}
           className="block rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-200"
         >
-          <div className="relative overflow-hidden">
-            <img
+          <div className="relative overflow-hidden" style={{ height: '12rem' }}>
+            <Image
               src={post.image}
               alt={post.title}
-              className="w-full h-48 object-cover transition-transform duration-300 transform hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              style={{ objectFit: 'cover' }}
+              priority={true}
+              className="transition-transform duration-300 transform hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
               <h2 className="text-xl font-bold">{post.title}</h2>

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 const FeaturedPosts = ({ posts }) => {
   if (posts.length < 3) return null;
@@ -15,10 +16,14 @@ const FeaturedPosts = ({ posts }) => {
           className="block rounded shadow hover:shadow-lg transition-shadow duration-200 overflow-hidden"
         >
           <div className="relative w-full h-56 md:h-96">
-            <img
+            <Image
               src={firstPost.image}
               alt={firstPost.title}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 transform hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              style={{ objectFit: 'cover' }}
+              priority={true}
+              className="transition-transform duration-300 transform hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
               <h2 className="text-lg md:text-xl font-bold">
@@ -34,10 +39,14 @@ const FeaturedPosts = ({ posts }) => {
           className="block rounded shadow hover:shadow-lg transition-shadow duration-200 relative overflow-hidden flex-grow"
         >
           <div className="relative w-full h-56 md:h-full">
-            <img
+            <Image
               src={secondPost.image}
               alt={secondPost.title}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 transform hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              style={{ objectFit: 'cover' }}
+              priority={true}
+              className="transition-transform duration-300 transform hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
               <h2 className="text-sm md:text-lg font-bold">
@@ -51,10 +60,14 @@ const FeaturedPosts = ({ posts }) => {
           className="block rounded shadow hover:shadow-lg transition-shadow duration-200 relative overflow-hidden flex-grow"
         >
           <div className="relative w-full h-56 md:h-full">
-            <img
+            <Image
               src={thirdPost.image}
               alt={thirdPost.title}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 transform hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              style={{ objectFit: 'cover' }}
+              priority={true}
+              className="transition-transform duration-300 transform hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
               <h2 className="text-sm md:text-lg font-bold">

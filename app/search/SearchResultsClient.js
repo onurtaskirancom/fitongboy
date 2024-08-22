@@ -31,7 +31,7 @@ export default function SearchResultsClient({ searchParams }) {
     if (query) {
       fetchSearchResults();
     }
-  }, [query]);
+  }, [query]); // `query` bağımlılık olarak eklendi
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -46,8 +46,9 @@ export default function SearchResultsClient({ searchParams }) {
     <>
       <div className="max-w-screen-xl mx-auto p-4 mt-16">
         <h1 className="text-3xl font-bold text-center mb-8">
-          Arama Sonuçları: "{query}"
-        </h1>
+          Arama Sonuçları: &quot;{query}&quot;
+        </h1>{' '}
+        {/* Çift tırnaklar &quot; ile kaçırıldı */}
         {currentPosts.length > 0 ? (
           <>
             <BlogList posts={currentPosts} />

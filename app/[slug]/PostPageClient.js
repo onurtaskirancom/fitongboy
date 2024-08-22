@@ -18,13 +18,13 @@ export default function PostPageClient({ slug }) {
   const [similarPosts, setSimilarPosts] = useState([]);
   const hasIncrementedViews = useRef(false);
   const firstRender = useRef(true);
-  const router = useRouter(); // Next.js router
+  const router = useRouter();
 
   useEffect(() => {
     let isMounted = true;
 
     async function fetchPost() {
-      if (!slug || slug === 'rss.xml') return; // Filter files like rss.xml
+      if (!slug || slug === 'rss.xml') return;
       try {
         const res = await fetch(`/api/mdx?slug=${slug}`);
         if (!res.ok) {
@@ -40,7 +40,7 @@ export default function PostPageClient({ slug }) {
         }
       } catch (error) {
         console.error('Error fetching post:', error);
-        router.push('/404'); 
+        router.push('/404');
       }
     }
 
@@ -49,7 +49,7 @@ export default function PostPageClient({ slug }) {
     return () => {
       isMounted = false;
     };
-  }, [slug]);
+  }, [slug, router]);
 
   useEffect(() => {
     if (
@@ -201,11 +201,14 @@ export default function PostPageClient({ slug }) {
               {similarPosts.map((similarPost) => (
                 <Link key={similarPost.slug} href={`/${similarPost.slug}`}>
                   <div className="block rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-200">
-                    <div className="relative overflow-hidden">
+                    <div
+                      className="relative overflow-hidden"
+                      style={{ height: '12rem' }}
+                    >
                       <Image
                         src={similarPost.image}
                         alt={similarPost.title}
-                        className="w-full h-48 object-cover transition-transform duration-300 transform hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-300 transform hover:scale-105"
                         width={400}
                         height={300}
                         priority

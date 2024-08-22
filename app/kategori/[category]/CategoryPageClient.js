@@ -34,7 +34,7 @@ export default function CategoryPageClient({ category }) {
     }
 
     fetchCategoryPosts();
-  }, [category]);
+  }, [formattedCategory]); 
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
