@@ -14,7 +14,7 @@ body {
     max-width: calc((100% - 768px) / 2 + 768px); /* 768px is the 'md' breakpoint */
     max-width: calc((1024px - 768px) / 2 + 768px); /* Custom size between 'md' and 'lg' */
   }
-   .mr-1-25 {
+  .mr-1-25 {
     margin-right: 1.25rem;
   }
 }
@@ -23,6 +23,62 @@ body {
     img {
         width: auto;
         height: auto;
+    }
+
+    /* Prose sınıfını özelleştirme */
+    .prose {
+      @apply prose-lg mx-auto; /* İçeriği ortala */
+      max-width: 86ch !important; /* Varsayılan 65ch değerini geçersiz kılmak için !important ekledim */
+      color: inherit; /* Mevcut metin rengini kullan */
+    }
+
+    .prose img {
+      @apply rounded-lg; /* Görselleri yuvarlatılmış köşelerle yap, genişliği kaldır */
+    }
+
+    .prose h1 {
+      @apply text-4xl font-bold text-black dark:text-white mt-8 mb-4; /* Daha büyük başlık */
+    }
+
+    .prose h2 {
+      @apply text-3xl font-semibold text-black dark:text-gray-200 mt-6 mb-4;
+    }
+
+    .prose h3, .prose h4, .prose h5, .prose h6 {
+      @apply text-black dark:text-gray-300 mt-4 mb-2;
+    }
+
+    .prose p {
+      @apply text-lg leading-7 text-black dark:text-gray-300 mt-4 mb-4;
+    }
+
+    .prose a {
+      @apply text-blue-600 dark:text-blue-400 underline;
+    }
+
+    .prose strong {
+      @apply font-bold text-black dark:text-white;
+    }
+
+    .prose em {
+      @apply italic text-black dark:text-gray-200;
+    }
+
+    .prose blockquote {
+      @apply border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic;
+      color: inherit;
+    }
+
+    .prose ul, .prose ol {
+      @apply list-inside list-disc dark:text-gray-300;
+    }
+
+    .prose code {
+      @apply text-pink-600 dark:text-pink-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded;
+    }
+
+    .prose pre {
+      @apply bg-gray-900 text-gray-100 p-4 rounded-lg mt-4 mb-4 overflow-x-auto;
     }
 }
 

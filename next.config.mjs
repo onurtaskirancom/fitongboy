@@ -1,6 +1,11 @@
+import path from 'path';
+import remarkGfm from 'remark-gfm';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypePrism from '@mapbox/rehype-prism';
+import withPlugins from 'next-compose-plugins';
 import withMDX from '@next/mdx';
 
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx'],
   async redirects() {
@@ -16,6 +21,10 @@ const nextConfig = {
 
 const mdxConfig = withMDX({
   extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, rehypePrism],
+  },
 })(nextConfig);
 
-export default mdxConfig;
+export default withPlugins([], mdxConfig);
