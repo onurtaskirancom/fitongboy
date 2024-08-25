@@ -20,6 +20,8 @@ export default function PostPageClient({ slug }) {
   const firstRender = useRef(true);
   const router = useRouter();
 
+  const [imageError, setImageError] = useState(false);
+
   useEffect(() => {
     let isMounted = true;
 
@@ -155,12 +157,13 @@ export default function PostPageClient({ slug }) {
     <>
       <div className="max-w-custom mx-auto p-4 mt-16">
         <Image
-          src={post.frontmatter.image}
+          src={imageError ? '/images/default.jpg' : post.frontmatter.image}
           alt={post.frontmatter.title}
           className="w-full h-auto mb-4 mx-auto rounded-lg"
           width={800}
           height={450}
           priority
+          onError={() => setImageError(true)}
         />
         <h1 className="text-3xl font-bold text-center">
           {post.frontmatter.title}
@@ -206,12 +209,21 @@ export default function PostPageClient({ slug }) {
                       style={{ height: '12rem' }}
                     >
                       <Image
-                        src={similarPost.image}
+                        src={similarPost.image || '/images/default.jpg'}
                         alt={similarPost.title}
                         className="w-full h-full object-cover transition-transform duration-300 transform hover:scale-105"
                         width={400}
                         height={300}
                         priority
+                        onError={() =>
+                          setSimilarPosts((prevPosts) =>
+                            prevPosts.map((post) =>
+                              post.slug === similarPost.slug
+                                ? { ...post, image: '/images/default.jpg' }
+                                : post
+                            )
+                          )
+                        }
                       />
                       <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
                         <h2 className="text-xl font-bold">

@@ -80,6 +80,26 @@ body {
     .prose pre {
       @apply bg-gray-900 text-gray-100 p-4 rounded-lg mt-4 mb-4 overflow-x-auto;
     }
+
+    /* Tablo stilini özelleştirme */
+    .prose table {
+      @apply table-auto w-full text-left border-collapse;
+      border: 1px solid #e2e8f0;
+    }
+
+    .prose thead {
+      @apply bg-gray-200 dark:bg-gray-700;
+    }
+
+    .prose th,
+    .prose td {
+      @apply border px-4 py-2;
+      border: 1px solid #e2e8f0;
+    }
+
+    .prose tbody tr:nth-child(odd) {
+      @apply bg-gray-100 dark:bg-gray-800;
+    }
 }
 
 .spinner-border {

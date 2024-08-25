@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FaFacebook, FaInstagram, FaRss, FaYoutube } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
+import { useState } from 'react';
 
 const replaceTurkishCharacters = (str) => {
   const turkishMap = {
@@ -29,6 +30,19 @@ const replaceTurkishCharacters = (str) => {
 };
 
 const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
+  const [popularPostErrors, setPopularPostErrors] = useState({});
+  const [recentPostErrors, setRecentPostErrors] = useState({});
+
+  const handleImageError = (slug, type) => {
+    if (type === 'popular') {
+      setPopularPostErrors((prev) => ({ ...prev, [slug]: true }));
+    } else if (type === 'recent') {
+      setRecentPostErrors((prev) => ({ ...prev, [slug]: true }));
+    }
+  };
+
+  const defaultImage = '/images/default.jpg';
+
   return (
     <div>
       <section className="mb-4 pb-4">
@@ -67,13 +81,16 @@ const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
                 >
                   <div className="relative w-full h-32">
                     <Image
-                      src={post.image}
+                      src={
+                        popularPostErrors[post.slug] ? defaultImage : post.image
+                      }
                       alt={post.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       style={{ objectFit: 'cover' }}
                       priority={true}
                       className="transition-transform duration-300 transform hover:scale-105"
+                      onError={() => handleImageError(post.slug, 'popular')}
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
                       <h2 className="text-sm font-bold">{post.title}</h2>
@@ -101,13 +118,16 @@ const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
                 >
                   <div className="relative w-full h-32">
                     <Image
-                      src={post.image}
+                      src={
+                        recentPostErrors[post.slug] ? defaultImage : post.image
+                      }
                       alt={post.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       style={{ objectFit: 'cover' }}
                       priority={true}
                       className="transition-transform duration-300 transform hover:scale-105"
+                      onError={() => handleImageError(post.slug, 'recent')}
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
                       <h2 className="text-sm font-bold">{post.title}</h2>

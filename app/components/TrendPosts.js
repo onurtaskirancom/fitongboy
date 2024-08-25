@@ -39,7 +39,7 @@ const TrendPosts = ({ title, posts }) => {
               style={{ height: '12rem' }}
             >
               <Image
-                src={post.image}
+                src={post.image || '/images/default.jpg'}
                 alt={post.title}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
