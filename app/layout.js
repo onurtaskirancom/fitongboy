@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import ThemeProvider from './components/ThemeProvider';
 import ScrollToTop from './components/ScrollToTop';
 import CanonicalHead from './components/CanonicalHead';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -49,6 +50,22 @@ export default function RootLayout({ children }) {
       >
         <CanonicalHead
           siteUrl={process.env.SITE_URL || 'http://localhost:3000'}
+        />
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-6L1VSV4F3R"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-6L1VSV4F3R');
+            `,
+          }}
         />
         <ThemeProvider>
           <Navbar />
