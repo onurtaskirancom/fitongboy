@@ -5,13 +5,17 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 const FeaturedPosts = ({ posts }) => {
-  if (posts.length < 3) return null;
 
   const [firstPostError, setFirstPostError] = useState(false);
   const [secondPostError, setSecondPostError] = useState(false);
   const [thirdPostError, setThirdPostError] = useState(false);
 
   const defaultImage = '/images/default.jpg';
+
+
+  if (posts.length < 3) {
+    return null;
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 px-4 md:px-4">
