@@ -31,7 +31,7 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
   const [recentPosts, setRecentPosts] = useState([]);
-  const [postsPerPage] = useState(15);
+  const [postsPerPage] = useState(13);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -41,17 +41,31 @@ export default function Home() {
         return;
       }
       const data = await res.json();
-      setPosts(data.sort((a, b) => new Date(b.date) - new Date(a.date)));
+      const validPosts = data.filter(
+        (post) => post.date && typeof post.date === 'string'
+      );
+
+      setPosts(
+        validPosts.sort(
+          (a, b) =>
+            new Date(b.date.split('-').reverse().join('-')) -
+            new Date(a.date.split('-').reverse().join('-'))
+        )
+      );
       setPopularPosts(
-        data
+        validPosts
           .slice()
           .sort((a, b) => b.views - a.views)
           .slice(0, 5)
       );
       setRecentPosts(
-        data
+        validPosts
           .slice()
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .sort(
+            (a, b) =>
+              new Date(b.date.split('-').reverse().join('-')) -
+              new Date(a.date.split('-').reverse().join('-'))
+          )
           .slice(0, 5)
       );
     }
@@ -88,52 +102,53 @@ export default function Home() {
     6
   );
 
- return (
-   <div>
-     <Navbar />
-     <div className="max-w-screen-xl mx-auto flex flex-col pt-16">
-       {currentPage === 1 && (
-         <>
-           <FeaturedPosts posts={posts} />
-           <TrendPosts
-             title="Antrenmanlarda Trend Olanlar"
-             posts={antrenmanPosts}
-           />
-           <TrendPosts title="Beslenmede Trend Olanlar" posts={beslenmePosts} />
-         </>
-       )}
-       <div className="flex flex-col md:flex-row">
-         <main className="w-full md:w-3/4 p-4">
-           <BlogList posts={currentPosts.slice(currentPage === 1 ? 3 : 0)} />
-           <div className="pagination mt-4 flex justify-center">
-             {Array.from({ length: totalPages }, (_, index) => (
-               <button
-                 key={index + 1}
-                 onClick={() => paginate(index + 1)}
-                 className={`px-4 py-2 mx-1 rounded ${
-                   currentPage === index + 1
-                     ? 'bg-gray-600 text-white'
-                     : 'bg-gray-300 text-black'
-                 }`}
-               >
-                 {index + 1}
-               </button>
-             ))}
-           </div>
-         </main>
-         <aside className="w-full md:w-1/4 p-4">
-           <Sidebar
-             categories={categories}
-             popularPosts={popularPosts}
-             recentPosts={recentPosts}
-           />
-         </aside>
-       </div>
-     </div>
-     <CategoryList categories={categories} />
-     <Footer />
-   </div>
- );
-
+  return (
+    <div>
+      <Navbar />
+      <div className="max-w-screen-xl mx-auto flex flex-col pt-16">
+        {currentPage === 1 && (
+          <>
+            <FeaturedPosts posts={posts} />
+            <TrendPosts
+              title="Antrenmanlarda Trend Olanlar"
+              posts={antrenmanPosts}
+            />
+            <TrendPosts
+              title="Beslenmede Trend Olanlar"
+              posts={beslenmePosts}
+            />
+          </>
+        )}
+        <div className="flex flex-col md:flex-row">
+          <main className="w-full md:w-3/4 p-4">
+            <BlogList posts={currentPosts.slice(currentPage === 1 ? 3 : 0)} />
+            <div className="pagination mt-4 flex justify-center">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index + 1}
+                  onClick={() => paginate(index + 1)}
+                  className={`px-4 py-2 mx-1 rounded ${
+                    currentPage === index + 1
+                      ? 'bg-blue-400  text-white'
+                      : 'bg-gray-300 text-black'
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+          </main>
+          <aside className="w-full md:w-1/4 p-4">
+            <Sidebar
+              categories={categories}
+              popularPosts={popularPosts}
+              recentPosts={recentPosts}
+            />
+          </aside>
+        </div>
+      </div>
+      <CategoryList categories={categories} />
+      <Footer />
+    </div>
+  );
 }
-

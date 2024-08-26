@@ -25,19 +25,19 @@ body {
         height: auto;
     }
 
-    /* Prose sınıfını özelleştirme */
+    /* Customize the Prose class */
     .prose {
-      @apply prose-lg mx-auto; /* İçeriği ortala */
-      max-width: 86ch !important; /* Varsayılan 65ch değerini geçersiz kılmak için !important ekledim */
-      color: inherit; /* Mevcut metin rengini kullan */
+      @apply prose-lg mx-auto; /* Center content */
+      max-width: 86ch !important; /* Override the default 65ch value with !important */
+      color: inherit; /* Use the current text color */
     }
 
     .prose img {
-      @apply rounded-lg; /* Görselleri yuvarlatılmış köşelerle yap, genişliği kaldır */
+      @apply rounded-lg; /* Round image corners, remove width */
     }
 
     .prose h1 {
-      @apply text-4xl font-bold text-black dark:text-white mt-8 mb-4; /* Daha büyük başlık */
+      @apply text-4xl font-bold text-black dark:text-white mt-8 mb-4; /* Larger heading */
     }
 
     .prose h2 {
@@ -70,7 +70,7 @@ body {
     }
 
     .prose ul, .prose ol {
-      @apply list-inside list-disc dark:text-gray-300;
+      @apply list-inside list-decimal dark:text-gray-300; /* Use list-decimal to show numbered lists */
     }
 
     .prose code {
@@ -81,7 +81,7 @@ body {
       @apply bg-gray-900 text-gray-100 p-4 rounded-lg mt-4 mb-4 overflow-x-auto;
     }
 
-    /* Tablo stilini özelleştirme */
+    /* Customize table styling */
     .prose table {
       @apply table-auto w-full text-left border-collapse;
       border: 1px solid #e2e8f0;
@@ -93,7 +93,7 @@ body {
 
     .prose th,
     .prose td {
-      @apply border px-4 py-2;
+      @apply border px-4 py-2 text-black dark:text-white; /* Black by default, white in dark mode */
       border: 1px solid #e2e8f0;
     }
 
