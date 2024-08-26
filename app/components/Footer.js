@@ -25,7 +25,7 @@ const Footer = () => {
             </Link>
           </div>
           <div className="flex flex-col items-center space-y-4 mb-4">
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap justify-center space-x-4 text-center">
               <Link href="/" className="hover:text-blue-400 hover:no-underline">
                 Anasayfa
               </Link>
@@ -61,7 +61,7 @@ const Footer = () => {
               </Link>
             </div>
           </div>
-          <div className="flex space-x-4 mb-4">
+          <div className="flex justify-center space-x-4 mb-4">
             <Link href="https://www.facebook.com" aria-label="Facebook">
               <FaFacebook className="w-6 h-6 hover:text-blue-600" />
             </Link>
