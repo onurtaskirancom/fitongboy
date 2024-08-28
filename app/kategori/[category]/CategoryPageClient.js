@@ -9,9 +9,11 @@ import Footer from '@/app/components/Footer';
 export default function CategoryPageClient({ category }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const formattedCategory = replaceTurkishChars(category)
     .toLowerCase()
-    .replace(/-/g, ' ');
+    .replace(/\s+/g, '-'); 
+
   const page = searchParams.get('page');
   const currentPage = page ? parseInt(page, 10) : 1;
 
@@ -26,15 +28,15 @@ export default function CategoryPageClient({ category }) {
           throw new Error('Failed to fetch posts');
         }
         const data = await res.json();
-        setPosts(data || []); // Default to an empty array if undefined
+        setPosts(data || []); 
       } catch (error) {
         console.error('Error fetching posts:', error);
-        setPosts([]); // Default to an empty array on error
+        setPosts([]); 
       }
     }
 
     fetchCategoryPosts();
-  }, [formattedCategory]); 
+  }, [formattedCategory]);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -42,7 +44,10 @@ export default function CategoryPageClient({ category }) {
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
   const paginate = (pageNumber) => {
-    router.push(`/kategori/${category}?page=${pageNumber}`);
+    const formattedCategory = replaceTurkishChars(category)
+      .toLowerCase()
+      .replace(/\s+/g, '-');
+    router.push(`/kategori/${formattedCategory}?page=${pageNumber}`);
   };
 
   return (
@@ -50,27 +55,31 @@ export default function CategoryPageClient({ category }) {
       <div className="max-w-screen-xl mx-auto p-4 mt-16">
         <h1 className="text-3xl font-bold text-center mb-8">
           {formattedCategory.charAt(0).toUpperCase() +
-            formattedCategory.slice(1)}{' '}
+            formattedCategory.slice(1).replace(/-/g, ' ')}{' '}
           Yazıları
         </h1>
         <BlogList posts={currentPosts} />
-        <div className="pagination mt-4 flex justify-center">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index + 1}
-              onClick={() => paginate(index + 1)}
-              className={`px-4 py-2 mx-1 rounded ${
-                currentPage === index + 1
-                  ? 'bg-blue-400  text-white'
-                  : 'bg-gray-300 text-black'
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+        {totalPages > 1 && (
+          <div className="pagination mt-4 flex justify-center">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => paginate(index + 1)}
+                className={`px-4 py-2 mx-1 rounded ${
+                  currentPage === index + 1
+                    ? 'bg-blue-400 text-white'
+                    : 'bg-gray-300 text-black'
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
       <Footer />
     </>
   );
 }
+
+

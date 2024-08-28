@@ -6,7 +6,6 @@ import replaceTurkishChars from '../../utils/turkishChars';
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const category = searchParams.get('category')?.toLowerCase();
-  const query = searchParams.get('q')?.toLowerCase();
 
   try {
     const blogDirectory = path.join(process.cwd(), 'app', 'posts');
@@ -38,20 +37,8 @@ export async function GET(req) {
         (post) =>
           post.categories &&
           post.categories
-            .map((c) => replaceTurkishChars(c.toLowerCase()))
+            .map((c) => replaceTurkishChars(c).replace(/\s+/g, '-'))
             .includes(category)
-      );
-    }
-
-    if (query) {
-      posts = posts.filter(
-        (post) =>
-          post.title.toLowerCase().includes(query) ||
-          post.content.includes(query) ||
-          (post.categories &&
-            post.categories.some((c) =>
-              replaceTurkishChars(c.toLowerCase()).includes(query)
-            ))
       );
     }
 
@@ -73,4 +60,3 @@ export async function GET(req) {
     );
   }
 }
-
