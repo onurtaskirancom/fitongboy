@@ -34,7 +34,7 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@Fitongboy',
+      site: '@fitongboy',
       title: `${post.frontmatter.title} | Fitongboy`,
       description: post.frontmatter.description || 'Fitongboy blog post',
       image: `${process.env.SITE_URL || 'http://localhost:3000'}${

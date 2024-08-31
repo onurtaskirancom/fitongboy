@@ -1,10 +1,7 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Navbar from './components/Navbar';
-import ThemeProvider from './components/ThemeProvider';
-import ScrollToTop from './components/ScrollToTop';
 import CanonicalHead from './components/CanonicalHead';
-import Script from 'next/script';
+import RootLayoutClient from './RootLayoutClient'; 
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -32,7 +29,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@Fitongboy',
+    site: '@fitongboy',
     title: 'Fitongboy | Fitness ve Vücut Geliştirme Platformu',
     description:
       'Fitongboy, fitness, vücut geliştirme ve güç antrenmanı konularında doğru bilgileri sunar. Hedeflerinize ulaşmanız için buradayız.',
@@ -51,29 +48,7 @@ export default function RootLayout({ children }) {
         <CanonicalHead
           siteUrl={process.env.SITE_URL || 'http://localhost:3000'}
         />
-        <Script
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-6L1VSV4F3R"
-        />
-        <Script
-          id="google-analytics"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-6L1VSV4F3R');
-            `,
-          }}
-        />
-        <ThemeProvider>
-          <Navbar />
-          <ScrollToTop />
-          <div className="pt-16">
-            <div className="mx-auto">{children}</div>
-          </div>
-        </ThemeProvider>
+        <RootLayoutClient>{children}</RootLayoutClient>{' '}
       </body>
     </html>
   );

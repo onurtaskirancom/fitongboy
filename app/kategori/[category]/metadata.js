@@ -37,7 +37,7 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@Fitongboy',
+      site: '@fitongboy',
       title: `Fitongboy | ${
         formattedCategory.charAt(0).toUpperCase() + formattedCategory.slice(1)
       } Yazıları`,

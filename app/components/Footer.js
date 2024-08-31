@@ -62,13 +62,13 @@ const Footer = () => {
             </div>
           </div>
           <div className="flex justify-center space-x-4 mb-4">
-            <Link href="https://www.facebook.com" aria-label="Facebook">
-              <FaFacebook className="w-6 h-6 hover:text-blue-600" />
-            </Link>
-            <Link href="https://www.twitter.com" aria-label="Twitter">
+            <Link href="https://www.twitter.com/fitongboy" aria-label="Twitter">
               <FaXTwitter className="w-6 h-6 hover:text-blue-400" />
             </Link>
-            <Link href="https://www.instagram.com" aria-label="Instagram">
+            <Link
+              href="https://www.instagram.com/fitongboy"
+              aria-label="Instagram"
+            >
               <FaInstagram className="w-6 h-6 hover:text-pink-600" />
             </Link>
             <Link href="https://www.youtube.com" aria-label="YouTube">

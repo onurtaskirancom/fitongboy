@@ -25,7 +25,7 @@ export const generateMetadata = () => {
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@Fitongboy',
+      site: '@fitongboy',
       title: 'Fitongboy | Hakkımızda',
       description: 'Fitongboy hakkında bilgi edinin.',
       images: `${siteUrl}/images/fitongboy-logo.png`,

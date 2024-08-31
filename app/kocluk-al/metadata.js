@@ -22,7 +22,7 @@ export async function generateMetadata() {
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@Fitongboy',
+      site: '@fitongboy',
       title: 'Fitongboy | Koçluk Talebi',
       description: 'Fitongboy ile koçluk talebinde bulunun.',
       images: `${siteUrl}/images/fitongboy-logo.png`,
