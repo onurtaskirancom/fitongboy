@@ -10,6 +10,21 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CategoryList from './components/CategoryList';
 
+// Helper function that checks date format and converts for sorting
+const parseDate = (dateString) => {
+  if (dateString.includes('-')) {
+    const parts = dateString.split('-');
+    if (parts[2].length === 4) {
+      // 'day-month-year' format
+      return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+    } else {
+      // 'year-month-day' format
+      return new Date(dateString);
+    }
+  }
+  return new Date(dateString); // If it is already a valid date format
+};
+
 const filterPostsByCategory = (posts, category) => {
   return posts.filter((post) => post.categories.includes(category));
 };
@@ -31,7 +46,7 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
   const [recentPosts, setRecentPosts] = useState([]);
-  const [postsPerPage] = useState(13);
+  const [postsPerPage] = useState(10);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -45,29 +60,19 @@ export default function Home() {
         (post) => post.date && typeof post.date === 'string'
       );
 
-      setPosts(
-        validPosts.sort(
-          (a, b) =>
-            new Date(b.date.split('-').reverse().join('-')) -
-            new Date(a.date.split('-').reverse().join('-'))
-        )
+      // Sort posts in reverse order by date (newest date at the top)
+      const sortedPosts = validPosts.sort(
+        (a, b) => parseDate(b.date) - parseDate(a.date)
       );
+
+      setPosts(sortedPosts);
       setPopularPosts(
-        validPosts
+        sortedPosts
           .slice()
           .sort((a, b) => b.views - a.views)
           .slice(0, 5)
       );
-      setRecentPosts(
-        validPosts
-          .slice()
-          .sort(
-            (a, b) =>
-              new Date(b.date.split('-').reverse().join('-')) -
-              new Date(a.date.split('-').reverse().join('-'))
-          )
-          .slice(0, 5)
-      );
+      setRecentPosts(sortedPosts.slice(0, 5)); // 5 newest posts
     }
 
     async function fetchCategories() {
@@ -84,10 +89,19 @@ export default function Home() {
     fetchCategories();
   }, []);
 
+  // Skip first 3 posts for first page, full post list for other pages
+  const remainingPosts = posts.slice(3); // Top 3 posts featured on FeaturedPosts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(posts.length / postsPerPage);
+
+  // If it's on the first page, show it from the 3rd post; with normal slice on other pages
+  const currentPosts =
+    currentPage === 1
+      ? remainingPosts.slice(0, postsPerPage)
+      : remainingPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Calculate total number of pages (after subtracting first 3 posts)
+  const totalPages = Math.ceil(remainingPosts.length / postsPerPage);
 
   const paginate = (pageNumber) => {
     router.push(`/?page=${pageNumber}`);
@@ -108,7 +122,7 @@ export default function Home() {
       <div className="max-w-screen-xl mx-auto flex flex-col pt-16">
         {currentPage === 1 && (
           <>
-            <FeaturedPosts posts={posts} />
+            <FeaturedPosts posts={posts.slice(0, 3)} />
             <TrendPosts
               title="Antrenmanlarda Trend Olanlar"
               posts={antrenmanPosts}
@@ -121,7 +135,7 @@ export default function Home() {
         )}
         <div className="flex flex-col md:flex-row">
           <main className="w-full md:w-3/4 p-4">
-            <BlogList posts={currentPosts.slice(currentPage === 1 ? 3 : 0)} />
+            <BlogList posts={currentPosts} />
             <div className="pagination mt-4 flex justify-center">
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
