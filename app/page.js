@@ -10,19 +10,16 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CategoryList from './components/CategoryList';
 
-// Helper function that checks date format and converts for sorting
 const parseDate = (dateString) => {
   if (dateString.includes('-')) {
     const parts = dateString.split('-');
     if (parts[2].length === 4) {
-      // 'day-month-year' format
       return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
     } else {
-      // 'year-month-day' format
       return new Date(dateString);
     }
   }
-  return new Date(dateString); // If it is already a valid date format
+  return new Date(dateString);
 };
 
 const filterPostsByCategory = (posts, category) => {
@@ -60,7 +57,6 @@ export default function Home() {
         (post) => post.date && typeof post.date === 'string'
       );
 
-      // Sort posts in reverse order by date (newest date at the top)
       const sortedPosts = validPosts.sort(
         (a, b) => parseDate(b.date) - parseDate(a.date)
       );
@@ -72,7 +68,7 @@ export default function Home() {
           .sort((a, b) => b.views - a.views)
           .slice(0, 5)
       );
-      setRecentPosts(sortedPosts.slice(0, 5)); // 5 newest posts
+      setRecentPosts(sortedPosts.slice(0, 5));
     }
 
     async function fetchCategories() {
@@ -89,18 +85,15 @@ export default function Home() {
     fetchCategories();
   }, []);
 
-  // Skip first 3 posts for first page, full post list for other pages
-  const remainingPosts = posts.slice(3); // Top 3 posts featured on FeaturedPosts
+  const remainingPosts = posts.slice(3);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
 
-  // If it's on the first page, show it from the 3rd post; with normal slice on other pages
   const currentPosts =
     currentPage === 1
       ? remainingPosts.slice(0, postsPerPage)
       : remainingPosts.slice(indexOfFirstPost, indexOfLastPost);
 
-  // Calculate total number of pages (after subtracting first 3 posts)
   const totalPages = Math.ceil(remainingPosts.length / postsPerPage);
 
   const paginate = (pageNumber) => {
