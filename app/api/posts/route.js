@@ -5,6 +5,7 @@ import replaceTurkishChars from '../../utils/turkishChars';
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
+  const query = searchParams.get('q')?.toLowerCase();
   const category = searchParams.get('category')?.toLowerCase();
 
   try {
@@ -32,12 +33,20 @@ export async function GET(req) {
         };
       });
 
+    if (query) {
+      posts = posts.filter(
+        (post) =>
+          post.title.toLowerCase().includes(query) ||
+          post.content.includes(query)
+      );
+    }
+
     if (category) {
       posts = posts.filter(
         (post) =>
           post.categories &&
           post.categories
-            .map((c) => replaceTurkishChars(c).replace(/\s+/g, '-'))
+            .map((c) => replaceTurkishChars(c.toLowerCase()))
             .includes(category)
       );
     }

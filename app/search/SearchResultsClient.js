@@ -7,12 +7,12 @@ import Footer from '../components/Footer';
 
 export default function SearchResultsClient({ searchParams }) {
   const router = useRouter();
-  const query = searchParams?.q || ''; // We get the query parameter using searchParams.q
+  const query = searchParams?.q || '';
   const page = searchParams?.page || 1;
   const currentPage = parseInt(page, 10);
 
   const [posts, setPosts] = useState([]);
-  const [postsPerPage] = useState(6);
+  const postsPerPage = 6;
 
   useEffect(() => {
     async function fetchSearchResults() {
@@ -22,16 +22,17 @@ export default function SearchResultsClient({ searchParams }) {
           throw new Error('Failed to fetch posts');
         }
         const data = await res.json();
-        setPosts(data);
+        setPosts(data || []);
       } catch (error) {
         console.error('Error fetching posts:', error);
+        setPosts([]);
       }
     }
 
     if (query) {
       fetchSearchResults();
     }
-  }, [query]); 
+  }, [query]);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
