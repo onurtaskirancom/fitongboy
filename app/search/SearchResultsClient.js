@@ -40,6 +40,7 @@ export default function SearchResultsClient({ searchParams }) {
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
   const paginate = (pageNumber) => {
+    if (pageNumber < 1 || pageNumber > totalPages) return; 
     router.push(`/search?q=${encodeURIComponent(query)}&page=${pageNumber}`);
   };
 
@@ -52,20 +53,44 @@ export default function SearchResultsClient({ searchParams }) {
         {currentPosts.length > 0 ? (
           <>
             <BlogList posts={currentPosts} />
-            <div className="pagination mt-4 flex justify-center">
+            <div className="pagination mt-4 flex flex-wrap justify-center items-center space-x-1 space-y-2">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                className={`px-4 py-2 mx-1 rounded text-sm ${
+                  currentPage === 1
+                    ? 'bg-gray-300 text-black cursor-default'
+                    : 'bg-blue-400 text-white cursor-pointer'
+                }`}
+                disabled={currentPage === 1}
+              >
+                Önceki
+              </button>
+
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index + 1}
                   onClick={() => paginate(index + 1)}
-                  className={`px-4 py-2 mx-1 rounded ${
+                  className={`px-4 py-2 mx-1 rounded text-sm ${
                     currentPage === index + 1
-                      ? 'bg-blue-400  text-white'
+                      ? 'bg-blue-400 text-white'
                       : 'bg-gray-300 text-black'
                   }`}
                 >
                   {index + 1}
                 </button>
               ))}
+
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                className={`px-4 py-2 mx-1 rounded text-sm ${
+                  currentPage === totalPages
+                    ? 'bg-gray-300 text-black cursor-default'
+                    : 'bg-blue-400 text-white cursor-pointer'
+                }`}
+                disabled={currentPage === totalPages}
+              >
+                Sonraki
+              </button>
             </div>
           </>
         ) : (

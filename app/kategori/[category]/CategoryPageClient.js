@@ -12,7 +12,7 @@ export default function CategoryPageClient({ category }) {
 
   const formattedCategory = replaceTurkishChars(category)
     .toLowerCase()
-    .replace(/\s+/g, '-'); 
+    .replace(/\s+/g, '-');
 
   const page = searchParams.get('page');
   const currentPage = page ? parseInt(page, 10) : 1;
@@ -28,10 +28,10 @@ export default function CategoryPageClient({ category }) {
           throw new Error('Failed to fetch posts');
         }
         const data = await res.json();
-        setPosts(data || []); 
+        setPosts(data || []);
       } catch (error) {
         console.error('Error fetching posts:', error);
-        setPosts([]); 
+        setPosts([]);
       }
     }
 
@@ -60,12 +60,24 @@ export default function CategoryPageClient({ category }) {
         </h1>
         <BlogList posts={currentPosts} />
         {totalPages > 1 && (
-          <div className="pagination mt-4 flex justify-center">
+          <div className="pagination mt-4 flex flex-wrap justify-center items-center space-x-1 space-y-2">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              className={`px-4 py-2 mx-1 rounded text-sm ${
+                currentPage === 1
+                  ? 'bg-gray-300 text-black cursor-default'
+                  : 'bg-blue-400 text-white cursor-pointer'
+              }`}
+              disabled={currentPage === 1}
+            >
+              Önceki
+            </button>
+
             {Array.from({ length: totalPages }, (_, index) => (
               <button
                 key={index + 1}
                 onClick={() => paginate(index + 1)}
-                className={`px-4 py-2 mx-1 rounded ${
+                className={`px-4 py-2 mx-1 rounded text-sm ${
                   currentPage === index + 1
                     ? 'bg-blue-400 text-white'
                     : 'bg-gray-300 text-black'
@@ -74,6 +86,18 @@ export default function CategoryPageClient({ category }) {
                 {index + 1}
               </button>
             ))}
+
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              className={`px-4 py-2 mx-1 rounded text-sm ${
+                currentPage === totalPages
+                  ? 'bg-gray-300 text-black cursor-default'
+                  : 'bg-blue-400 text-white cursor-pointer'
+              }`}
+              disabled={currentPage === totalPages}
+            >
+              Sonraki
+            </button>
           </div>
         )}
       </div>
@@ -81,5 +105,3 @@ export default function CategoryPageClient({ category }) {
     </>
   );
 }
-
-

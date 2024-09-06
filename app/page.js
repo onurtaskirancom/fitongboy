@@ -97,6 +97,7 @@ export default function Home() {
   const totalPages = Math.ceil(remainingPosts.length / postsPerPage);
 
   const paginate = (pageNumber) => {
+    if (pageNumber < 1 || pageNumber > totalPages) return; 
     router.push(`/?page=${pageNumber}`);
   };
 
@@ -129,20 +130,44 @@ export default function Home() {
         <div className="flex flex-col md:flex-row">
           <main className="w-full md:w-3/4 p-4">
             <BlogList posts={currentPosts} />
-            <div className="pagination mt-4 flex justify-center">
+            <div className="pagination mt-4 flex justify-center items-center space-x-1">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                className={`px-4 py-2 mx-1 rounded ${
+                  currentPage === 1
+                    ? 'bg-gray-300 text-black cursor-default'
+                    : 'bg-blue-400 text-white cursor-pointer'
+                }`}
+                disabled={currentPage === 1}
+              >
+                Önceki
+              </button>
+
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index + 1}
                   onClick={() => paginate(index + 1)}
                   className={`px-4 py-2 mx-1 rounded ${
                     currentPage === index + 1
-                      ? 'bg-blue-400  text-white'
+                      ? 'bg-blue-400 text-white'
                       : 'bg-gray-300 text-black'
                   }`}
                 >
                   {index + 1}
                 </button>
               ))}
+
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                className={`px-4 py-2 mx-1 rounded ${
+                  currentPage === totalPages
+                    ? 'bg-gray-300 text-black cursor-default'
+                    : 'bg-blue-400 text-white cursor-pointer'
+                }`}
+                disabled={currentPage === totalPages}
+              >
+                Sonraki
+              </button>
             </div>
           </main>
           <aside className="w-full md:w-1/4 p-4">
