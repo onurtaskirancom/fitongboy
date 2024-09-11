@@ -28,7 +28,23 @@ export default function CategoryPageClient({ category }) {
           throw new Error('Failed to fetch posts');
         }
         const data = await res.json();
-        setPosts(data || []);
+        
+        // Parse and sort dates
+        const sortedPosts = data
+          .filter(post => post.date && /^\d{2}-\d{2}-\d{4}$/.test(post.date))
+          .sort((a, b) => {
+            const [dayA, monthA, yearA] = a.date.split('-').map(Number);
+            const [dayB, monthB, yearB] = b.date.split('-').map(Number);
+            
+            // Compare dates
+            if (yearA !== yearB) return yearB - yearA;
+            if (monthA !== monthB) return monthB - monthA;
+            return dayB - dayA;
+          });
+        
+        console.log('Sıralanmış gönderiler:', sortedPosts.map(post => ({ title: post.title, date: post.date })));
+        
+        setPosts(sortedPosts || []);
       } catch (error) {
         console.error('Error fetching posts:', error);
         setPosts([]);
