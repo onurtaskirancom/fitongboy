@@ -4,7 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FaFacebook, FaInstagram, FaRss, FaYoutube } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { ref, get } from 'firebase/database';
+import { database } from '../utils/firebaseConfig';
 
 const replaceTurkishCharacters = (str) => {
   const turkishMap = {
@@ -29,19 +31,56 @@ const replaceTurkishCharacters = (str) => {
     .replace(/\s+/g, '-');
 };
 
-const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
-  const [popularPostErrors, setPopularPostErrors] = useState({});
-  const [recentPostErrors, setRecentPostErrors] = useState({});
-
-  const handleImageError = (slug, type) => {
-    if (type === 'popular') {
-      setPopularPostErrors((prev) => ({ ...prev, [slug]: true }));
-    } else if (type === 'recent') {
-      setRecentPostErrors((prev) => ({ ...prev, [slug]: true }));
-    }
-  };
-
+const Sidebar = ({ categories = [], recentPosts }) => {
+  const [popularPosts, setPopularPosts] = useState([]);
+  const [imageErrors, setImageErrors] = useState({});
   const defaultImage = '/images/default.jpg';
+
+  useEffect(() => {
+    async function fetchPopularPosts() {
+      try {
+        const postsRef = ref(database, 'views/');
+        const snapshot = await get(postsRef);
+
+        const response = await fetch('/api/posts');
+        const allPosts = await response.json();
+
+        if (snapshot.exists()) {
+          const postsArray = [];
+          snapshot.forEach((childSnapshot) => {
+            const views = childSnapshot.val().views || 0;
+            const slug = childSnapshot.key;
+            const postData = allPosts.find(post => post.slug === slug);
+            if (postData) {
+              postsArray.push({
+                slug: slug,
+                title: postData.title,
+                views: views,
+                image: postData.image
+              });
+            }
+          });
+
+          const sortedPosts = postsArray
+            .filter((post) => post.views > 0)
+            .sort((a, b) => b.views - a.views);
+
+          setPopularPosts(sortedPosts);
+        } else {
+          setPopularPosts([]);
+        }
+      } catch (error) {
+        console.error('Error fetching popular posts:', error);
+        setPopularPosts([]);
+      }
+    }
+
+    fetchPopularPosts();
+  }, []);
+
+  const handleImageError = (slug) => {
+    setImageErrors((prev) => ({ ...prev, [slug]: true }));
+  };
 
   return (
     <div>
@@ -73,40 +112,35 @@ const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
         </h3>
         <ul className="pt-2 space-y-4">
           {popularPosts.length > 0 ? (
-            popularPosts.map((post) => (
+            popularPosts.slice(0, 5).map((post) => (
               <li key={post.slug} className="relative">
                 <Link
                   href={`/${post.slug}`}
                   className="block overflow-hidden rounded shadow hover:shadow-lg transition-shadow duration-200"
                 >
-                  <div className="relative w-full h-32">
-                    <Image
-                      src={
-                        popularPostErrors[post.slug] ? defaultImage : post.image
-                      }
-                      alt={post.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      style={{ objectFit: 'cover' }}
-                      priority={true}
-                      className="transition-transform duration-300 transform hover:scale-105"
-                      onError={() => handleImageError(post.slug, 'popular')}
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
-                      <h2 className="text-sm font-bold">{post.title}</h2>
-                    </div>
+                  <Image
+                    src={imageErrors[post.slug] ? defaultImage : post.image}
+                    alt={post.title}
+                    width={500}
+                    height={200}
+                    className="w-full h-32 object-cover transition-transform duration-300 transform hover:scale-105"
+                    priority
+                    onError={() => handleImageError(post.slug)}
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
+                    <h2 className="text-sm font-bold">{post.title}</h2>
                   </div>
                 </Link>
               </li>
             ))
           ) : (
-            <li key="no-popular">En çok okunan yazı bulunamadı</li>
+            <li key="loading">Popüler gönderiler yükleniyor...</li>
           )}
         </ul>
       </section>
       <section className="mb-4 pb-4">
         <h3 className="text-xl font-bold border-l-4 border-blue-500 pl-3">
-          Son Yazılar
+          Son Gönderiler
         </h3>
         <ul className="pt-2 space-y-4">
           {recentPosts.length > 0 ? (
@@ -116,28 +150,23 @@ const Sidebar = ({ categories = [], popularPosts, recentPosts }) => {
                   href={`/${post.slug}`}
                   className="block overflow-hidden rounded shadow hover:shadow-lg transition-shadow duration-200"
                 >
-                  <div className="relative w-full h-32">
-                    <Image
-                      src={
-                        recentPostErrors[post.slug] ? defaultImage : post.image
-                      }
-                      alt={post.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      style={{ objectFit: 'cover' }}
-                      priority={true}
-                      className="transition-transform duration-300 transform hover:scale-105"
-                      onError={() => handleImageError(post.slug, 'recent')}
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
-                      <h2 className="text-sm font-bold">{post.title}</h2>
-                    </div>
+                  <Image
+                    src={imageErrors[post.slug] ? defaultImage : post.image}
+                    alt={post.title}
+                    width={500}
+                    height={200}
+                    className="w-full h-32 object-cover transition-transform duration-300 transform hover:scale-105"
+                    priority
+                    onError={() => handleImageError(post.slug)}
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
+                    <h2 className="text-sm font-bold">{post.title}</h2>
                   </div>
                 </Link>
               </li>
             ))
           ) : (
-            <li key="no-recent">Son yazı bulunamadı</li>
+            <li key="no-recent">Son gönderi bulunamadı</li>
           )}
         </ul>
       </section>

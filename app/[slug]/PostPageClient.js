@@ -8,10 +8,17 @@ import Footer from '../components/Footer';
 import replaceTurkishChars from '../utils/turkishChars';
 import { MdOutlineDateRange } from 'react-icons/md';
 import Image from 'next/image';
+import { ref, runTransaction } from 'firebase/database';
+import { database } from '../utils/firebaseConfig';
 
 const MDXRemote = dynamic(() =>
   import('next-mdx-remote').then((mod) => mod.MDXRemote)
 );
+
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString('tr-TR', options);
+};
 
 export default function PostPageClient({ slug }) {
   const [post, setPost] = useState(null);
@@ -65,27 +72,24 @@ export default function PostPageClient({ slug }) {
 
     firstRender.current = false;
 
-    async function incrementViews() {
+    const incrementViews = async (slug) => {
+      const postRef = ref(database, `views/${slug}`);
       try {
-        const res = await fetch('/api/increment-views', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ slug }),
+        await runTransaction(postRef, (post) => {
+          if (post) {
+            post.views = (post.views || 0) + 1;
+          } else {
+            post = { views: 1 };
+          }
+          return post;
         });
-        if (!res.ok) {
-          const errorResponse = await res.json();
-          console.error('Failed to increment views:', errorResponse);
-          throw new Error('Failed to increment views');
-        }
-        hasIncrementedViews.current = true;
       } catch (error) {
-        console.error('Error in incrementViews:', error);
+        console.error('Error updating view count:', error);
       }
-    }
+    };
 
-    incrementViews();
+    incrementViews(slug);
+    hasIncrementedViews.current = true;
   }, [slug]);
 
   useEffect(() => {

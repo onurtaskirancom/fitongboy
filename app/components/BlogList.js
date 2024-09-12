@@ -36,7 +36,7 @@ const BlogList = ({ posts }) => {
               <h2 className="text-xl font-bold">{post.title}</h2>
             </div>
           </div>
-          <div className="p-4 bg-white dark:bg-zinc-900">
+          <div className="p-4 bg-white dark:bg-zinc-900 h-full">
             <p className="text-black dark:text-slate-300">{post.excerpt}</p>
           </div>
         </Link>
