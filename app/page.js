@@ -22,17 +22,6 @@ const parseDate = (dateString) => {
   return new Date(dateString);
 };
 
-const filterPostsByCategory = (posts, category) => {
-  return posts.filter((post) => post.categories.includes(category));
-};
-
-const getTopPostsByViews = (posts, count) => {
-  return posts
-    .slice()
-    .sort((a, b) => b.views - a.views)
-    .slice(0, count);
-};
-
 export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -97,18 +86,9 @@ export default function Home() {
   const totalPages = Math.ceil(remainingPosts.length / postsPerPage);
 
   const paginate = (pageNumber) => {
-    if (pageNumber < 1 || pageNumber > totalPages) return; 
+    if (pageNumber < 1 || pageNumber > totalPages) return;
     router.push(`/?page=${pageNumber}`);
   };
-
-  const antrenmanPosts = getTopPostsByViews(
-    filterPostsByCategory(posts, 'Antrenman'),
-    6
-  );
-  const beslenmePosts = getTopPostsByViews(
-    filterPostsByCategory(posts, 'Beslenme'),
-    6
-  );
 
   return (
     <div>
@@ -119,12 +99,9 @@ export default function Home() {
             <FeaturedPosts posts={posts.slice(0, 3)} />
             <TrendPosts
               title="Antrenmanlarda Trend Olanlar"
-              posts={antrenmanPosts}
+              category="antrenman"
             />
-            <TrendPosts
-              title="Beslenmede Trend Olanlar"
-              posts={beslenmePosts}
-            />
+            <TrendPosts title="Beslenmede Trend Olanlar" category="beslenme" />
           </>
         )}
         <div className="flex flex-col md:flex-row">

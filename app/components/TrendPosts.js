@@ -4,9 +4,38 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-const TrendPosts = ({ title, posts }) => {
-  const [displayPosts, setDisplayPosts] = useState(posts.slice(0, 4));
+const TrendPosts = ({ title, category }) => {
+  const [posts, setPosts] = useState([]);
+  const [displayPosts, setDisplayPosts] = useState([]);
   const [imageErrors, setImageErrors] = useState({});
+
+  useEffect(() => {
+    const fetchTrendPosts = async () => {
+      try {
+        const response = await fetch(
+          `/api/posts?category=${encodeURIComponent(category)}`
+        );
+        if (!response.ok) {
+          console.error('Failed to fetch trend posts');
+          return;
+        }
+
+        const data = await response.json();
+        setPosts(data); // Store all posts in state
+
+        // Initially determine the number of posts to display based on screen size
+        if (window.innerWidth >= 1024 && window.innerWidth < 1280) {
+          setDisplayPosts(data.slice(0, 3));
+        } else {
+          setDisplayPosts(data.slice(0, 4));
+        }
+      } catch (error) {
+        console.error('Error fetching trend posts:', error);
+      }
+    };
+
+    fetchTrendPosts();
+  }, [category]);
 
   useEffect(() => {
     const updateDisplayPosts = () => {
@@ -44,7 +73,9 @@ const TrendPosts = ({ title, posts }) => {
               style={{ height: '12rem' }}
             >
               <Image
-                src={imageErrors[post.slug] ? '/images/default.jpg' : post.image}
+                src={
+                  imageErrors[post.slug] ? '/images/default.jpg' : post.image
+                }
                 alt={post.title}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
