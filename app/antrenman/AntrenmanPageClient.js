@@ -5,6 +5,18 @@ import BlogList from '../components/BlogList';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Footer from '../components/Footer';
 
+const parseDate = (dateString) => {
+  if (dateString.includes('-')) {
+    const parts = dateString.split('-');
+    if (parts[2].length === 4) {
+      return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+    } else {
+      return new Date(dateString);
+    }
+  }
+  return new Date(dateString);
+};
+
 export default function AntrenmanPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -16,16 +28,21 @@ export default function AntrenmanPageClient() {
 
   useEffect(() => {
     async function fetchAntrenmanPosts() {
-      try {
-        const res = await fetch('/api/posts?category=antrenman');
-        if (!res.ok) {
-          throw new Error('Failed to fetch posts');
-        }
-        const data = await res.json();
-        setPosts(data);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
+      const res = await fetch('/api/posts?category=antrenman');
+      if (!res.ok) {
+        console.error('Failed to fetch training posts');
+        return;
       }
+      const data = await res.json();
+      const validPosts = data.filter(
+        (post) => post.date && typeof post.date === 'string'
+      );
+
+      const sortedPosts = validPosts.sort(
+        (a, b) => parseDate(b.date) - parseDate(a.date)
+      );
+
+      setPosts(sortedPosts);
     }
 
     fetchAntrenmanPosts();

@@ -5,6 +5,18 @@ import BlogList from '../components/BlogList';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Footer from '../components/Footer';
 
+const parseDate = (dateString) => {
+  if (dateString.includes('-')) {
+    const parts = dateString.split('-');
+    if (parts[2].length === 4) {
+      return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+    } else {
+      return new Date(dateString);
+    }
+  }
+  return new Date(dateString);
+};
+
 export default function BeslenmePageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -22,9 +34,17 @@ export default function BeslenmePageClient() {
           throw new Error('Failed to fetch posts');
         }
         const data = await res.json();
-        setPosts(data);
+        const validPosts = data.filter(
+          (post) => post.date && typeof post.date === 'string'
+        );
+
+        const sortedPosts = validPosts.sort(
+          (a, b) => parseDate(b.date) - parseDate(a.date)
+        );
+
+        setPosts(sortedPosts);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error('Error occurred while fetching posts:', error);
       }
     }
 
