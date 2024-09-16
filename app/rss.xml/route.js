@@ -6,7 +6,7 @@ import { Feed } from 'feed';
 
 export async function GET() {
   try {
-    const siteUrl = process.env.SITE_URL || 'https://www.fitongboy.com';
+    const siteUrl = process.env.SITE_URL || 'https://fit.ongboy.com';
     const postsDirectory = path.join(process.cwd(), 'app', 'posts');
     const files = fs.readdirSync(postsDirectory);
 
