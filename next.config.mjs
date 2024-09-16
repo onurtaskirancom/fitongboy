@@ -1,19 +1,17 @@
-import path from 'path';
+import withMDX from '@next/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrism from '@mapbox/rehype-prism';
-import withPlugins from 'next-compose-plugins';
-import withMDX from '@next/mdx';
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx'],
-  async redirects() {
+  async rewrites() {
     return [
       {
         source: '/rss.xml',
         destination: '/api/rss',
-        permanent: true,
       },
     ];
   },
@@ -27,4 +25,4 @@ const mdxConfig = withMDX({
   },
 })(nextConfig);
 
-export default withPlugins([], mdxConfig);
+export default mdxConfig;
