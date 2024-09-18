@@ -7,6 +7,15 @@ import { useTheme } from './ThemeProvider';
 import { FaSun, FaMoon, FaSearch } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 
+const ThemeToggle = ({ theme, toggleTheme }) => (
+  <button
+    onClick={toggleTheme}
+    className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 p-2 rounded-md text-lg font-medium"
+  >
+    {theme === 'dark' ? <FaSun /> : <FaMoon />}
+  </button>
+);
+
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
@@ -84,12 +93,7 @@ const Navbar = () => {
             >
               Koçluk Al
             </Link>
-            <button
-              onClick={toggleTheme}
-              className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-lg font-medium flex items-center"
-            >
-              {theme === 'dark' ? <FaSun /> : <FaMoon />}
-            </button>
+            <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
             <form
               onSubmit={handleSearch}
               className="flex items-center space-x-2"
@@ -110,13 +114,14 @@ const Navbar = () => {
               </button>
             </form>
           </div>
-          <div className="flex xl:hidden">
+          <div className="flex xl:hidden items-center space-x-2">
+            <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
             <button
               onClick={toggleMenu}
               type="button"
-              className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white mr-[3.25rem]"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
             >
-              <span className="sr-only">Open main menu</span>
+              <span className="sr-only">Ana menüyü aç</span>
               <svg
                 className="h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg"
