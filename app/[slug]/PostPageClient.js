@@ -16,9 +16,14 @@ const MDXRemote = dynamic(() =>
 );
 
 const formatDate = (dateString) => {
+  // Convert date string to 'YYYY-MM-DD' format
+  const [day, month, year] = dateString.split('-');
+  const formattedDate = `${year}-${month}-${day}`;
+
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('tr-TR', options);
+  return new Date(formattedDate).toLocaleDateString('tr-TR', options);
 };
+
 
 export default function PostPageClient({ slug }) {
   const [post, setPost] = useState(null);
@@ -178,7 +183,7 @@ export default function PostPageClient({ slug }) {
           </div>
           <span className="relative bg-slate-200 dark:bg-gray-900 px-4 flex items=center">
             <MdOutlineDateRange className="mr-2" />
-            {post.frontmatter.date}
+            {formatDate(post.frontmatter.date)}
           </span>
         </div>
         <div className="prose mx-auto text-black dark:text-zinc-200 mt-4">
